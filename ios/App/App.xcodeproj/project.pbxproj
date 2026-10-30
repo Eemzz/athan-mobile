@@ -20,6 +20,7 @@
 		08E605D065074D519C9BE9FF /* athan_short.wav in Resources */ = {isa = PBXBuildFile; fileRef = FDFB8A9BC93141D7AC2C292F /* athan_short.wav */; };
 		F64F730AA9AE48EC8E09B168 /* AthanWidget.appex in Copy Files */ = {isa = PBXBuildFile; fileRef = FCFEE729EA3D4B0F9A81FC34 /* AthanWidget.appex */; };
 		33FAB94DF6724D6A922331D2 /* AthanWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8D566BF4C744E70800C4B17 /* AthanWidget.swift */; };
+		E95DB46F88AA42F89D988E0B /* athan_beautiful_short.wav in Resources */ = {isa = PBXBuildFile; fileRef = 2E15874BCF614640AFFF764D /* athan_beautiful_short.wav */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +39,7 @@
 		FDFB8A9BC93141D7AC2C292F /* athan_short.wav */ = {isa = PBXFileReference; name = "athan_short.wav"; path = "athan_short.wav"; sourceTree = "<group>"; lastKnownFileType = unknown; includeInIndex = 0; };
 		FCFEE729EA3D4B0F9A81FC34 /* AthanWidget.appex */ = {isa = PBXFileReference; name = "AthanWidget.appex"; path = "AthanWidget.appex"; sourceTree = BUILT_PRODUCTS_DIR; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; };
 		A8D566BF4C744E70800C4B17 /* AthanWidget.swift */ = {isa = PBXFileReference; name = "AthanWidget.swift"; path = "AthanWidget/AthanWidget.swift"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.swift; includeInIndex = 0; };
+		2E15874BCF614640AFFF764D /* athan_beautiful_short.wav */ = {isa = PBXFileReference; name = "athan_beautiful_short.wav"; path = "athan_beautiful_short.wav"; sourceTree = "<group>"; lastKnownFileType = unknown; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,6 +95,7 @@
 				50B271D01FEDC1A000F3C39B /* public */,
 				DF386CFBD90248FCAEB99E5D /* PrayerWidgetPlugin.swift */,
 				FDFB8A9BC93141D7AC2C292F /* athan_short.wav */,
+				2E15874BCF614640AFFF764D /* athan_beautiful_short.wav */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -195,6 +198,7 @@
 				504EC30D1FED79650016851F /* Main.storyboard in Resources */,
 				2FAD9763203C412B000D30F8 /* config.xml in Resources */,
 				08E605D065074D519C9BE9FF /* athan_short.wav in Resources */,
+				E95DB46F88AA42F89D988E0B /* athan_beautiful_short.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
