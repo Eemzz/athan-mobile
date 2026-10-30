@@ -8,6 +8,7 @@ A small Capacitor 8 app with plain TypeScript and CSS. No React, Flutter engine,
 - Device location, city presets, or custom coordinates with an explicit time zone. Location is stored locally.
 - Live next-prayer countdown, today's prayer times, automatic themes, midnight rollover, and refresh when the app resumes.
 - Native scheduled local notifications, athan/silent channels, per-prayer notification choices, and bundled athan audio.
+- Choose **Beautiful Adhan** (default) or **Prophet’s Mosque** in Settings. The choice is saved and applies to full playback and future notifications. Each recording uses its own Android notification channel and matching 28-second iOS excerpt.
 - Complete offline Arabic Quran and Pickthall English translation; all 114 surahs / 6,236 verses. Search Arabic (with or without vowel marks), English, surah names, or references such as `2:255`. Thirty verses per page. A saved verse reference can be bookmarked.
 - Android home-screen widget and iOS WidgetKit extension, with themes and upcoming prayer times shared from the app. Android widgets refresh at the next prayer and periodically; iOS uses a timeline of upcoming prayer boundaries. The OS controls actual widget refresh timing.
 
@@ -72,7 +73,7 @@ In Xcode, select your Apple development team for both **App** and **AthanWidget*
 
 Arabic Quran: [Tanzil Project](https://tanzil.net), CC BY 3.0 with verbatim copying terms. Arabic verse text is preserved unchanged; its source notice is retained in each surah. English: Marmaduke Pickthall's 1930 translation, public domain. Retrieved from [Quran JSON](https://quran-json.risanb.com/) with its [source/licensing manifest](https://quran-json.risanb.com/meta/sources.json). Included copies: `public/QURAN-LICENSE.txt`, `public/quran-sources.json`.
 
-Athan: ejaz215, [Call to prayer from the Prophet mosque](https://commons.wikimedia.org/wiki/File:33937_ejaz215_call-to-prayer-from-the-prophet-s-mo.ogg), [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/). Converted to mono 22.05 kHz MP3; iOS excerpt converted to 16 kHz WAV and trimmed to 28 seconds. Attribution is included in the app and `public/ATTRIBUTION.txt`.
+Athan: **Beautiful Adhan** by Adam-synagda (2022), [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Beautiful_adhan.ogg), [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/); and **Prophet’s Mosque** by ejaz215, [Call to prayer from the Prophet mosque](https://commons.wikimedia.org/wiki/File:33937_ejaz215_call-to-prayer-from-the-prophet-s-mo.ogg), [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/). Both converted to mono 22.05 kHz MP3, with matching 16 kHz WAV excerpts trimmed to 28 seconds for iOS. Attribution is included in the app and `public/ATTRIBUTION.txt`.
 
 Prayer calculations: [Adhan by Batoul Apps](https://github.com/batoulapps/adhan-js), MIT. Icons: [Lucide](https://lucide.dev/license), ISC. Native runtime: [Capacitor](https://capacitorjs.com/docs). This app has no affiliation with those projects or the reciter.
 

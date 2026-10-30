@@ -1,11 +1,12 @@
 import { Coordinates, CalculationMethod, Madhab, PrayerTimes } from 'adhan';
+import type { RecordingId } from './recordings';
 export const prayerNames = ['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'] as const;
 export type PrayerName = typeof prayerNames[number];
 export type Method = 'NorthAmerica' | 'MuslimWorldLeague' | 'UmmAlQura' | 'Egyptian' | 'Karachi';
 export interface Location { label: string; latitude: number; longitude: number; timezone: string }
-export interface Settings { location: Location | null; method: Method; hanafi: boolean; alerts: boolean; sound: boolean; muted: PrayerName[] }
+export interface Settings { location: Location | null; method: Method; hanafi: boolean; alerts: boolean; sound: boolean; recording: RecordingId; muted: PrayerName[] }
 export interface Prayer { name: PrayerName; at: Date }
-export const defaults: Settings = { location: null, method: 'NorthAmerica', hanafi: false, alerts: false, sound: true, muted: [] };
+export const defaults: Settings = { location: null, method: 'NorthAmerica', hanafi: false, alerts: false, sound: true, recording: 'beautiful', muted: [] };
 export function dateInZone(now: Date, timezone: string, offset = 0): Date {
   const parts = new Intl.DateTimeFormat('en-CA', {timeZone:timezone,year:'numeric',month:'numeric',day:'numeric'}).formatToParts(now);
   const p = (type: string) => Number(parts.find(x=>x.type===type)!.value);

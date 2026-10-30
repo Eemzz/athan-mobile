@@ -7,3 +7,5 @@ Icons: Lucide, ISC. https://lucide.dev/license
 
 Quran JSON packaging/metadata: Risan Bagja Pradana, CC BY-SA 4.0. https://github.com/risan/quran-json https://creativecommons.org/licenses/by-sa/4.0/
 
+
+Beautiful Adhan: Adam-synagda (2022), CC0 1.0. https://commons.wikimedia.org/wiki/File:Beautiful_adhan.ogg https://creativecommons.org/publicdomain/zero/1.0/ Converted to mono 22.05 kHz MP3; iOS excerpt trimmed to 28 seconds.

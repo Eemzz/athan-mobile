@@ -3,9 +3,10 @@
 ## Passed
 
 - Production TypeScript / Vite build.
-- Six automated prayer, search-normalization, notification-selection, and location-validation tests.
+- Eight automated prayer, search-normalization, notification-selection, location-validation, and recording tests. Both iOS audio excerpts are verified to be shorter than 30 seconds.
 - Quran integrity: 114 surahs, 6,236 verses, every Arabic verse and English translation present, source notice retained per surah.
 - Browser interaction checks: choose San Francisco, save location, see calculated prayer times and matching theme, browse Quran, search `2:255`, confirm the verse and translation.
+- Browser recording checks: Beautiful Adhan selected for older saved settings by default; Prophet’s Mosque selection survives a reload; Beautiful Adhan restored and saved.
 - Android native compilation (`:app:assembleDebug`), including custom widget provider and Capacitor bridge.
 - Android APK signing verification using `apksigner verify`.
 - APK metadata: `app.athan.daily`, version 0.1.0, minimum SDK 24 (Android 7), target SDK 36.
@@ -13,7 +14,7 @@
 
 ## Android deliverable
 
-`../athan-android-debug.apk`: about 8.5 MiB. Debug-signed for testing. This is not a Play Store release build.
+`../athan-android-debug.apk`: rebuilt with both athan choices. Debug-signed for testing. This is not a Play Store release build.
 
 ## Not verified on this Windows machine
 
