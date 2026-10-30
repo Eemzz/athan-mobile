@@ -1,0 +1,8 @@
+import type { PrayerName } from './prayers';
+export const themes: Record<PrayerName,{sky:string;ink:string;orb:string;glow:string;hill:string;paper:string;text:string;muted:string;wash:string;accent:string;line:string;frame:string;mood:string;icon:string}> = {
+  Fajr:{sky:'linear-gradient(145deg,#dce6f0,#f9dfc9)',ink:'#40495a',orb:'#fff3d5',glow:'#fff2d366',hill:'#bdc8c4',paper:'#faf8fa',text:'#30323d',muted:'#686873',wash:'#efebf1',accent:'#735c7d',line:'#e8e3e9',frame:'#dedce1',mood:'A new day, a fresh beginning.',icon:'sunrise'},
+  Dhuhr:{sky:'linear-gradient(145deg,#f7edc8,#efdaa0)',ink:'#5a4b28',orb:'#fff8d3',glow:'#fff8d388',hill:'#d5c390',paper:'#fcfaf5',text:'#333128',muted:'#706b5e',wash:'#f3eddf',accent:'#80621f',line:'#eae6dc',frame:'#e2dfd6',mood:'Pause in the light of your day.',icon:'sun'},
+  Asr:{sky:'linear-gradient(145deg,#e4eadb,#c9d5b7)',ink:'#344a36',orb:'#f8f0c9',glow:'#f8f0c955',hill:'#a7bb95',paper:'#f8faf6',text:'#2e3630',muted:'#646e62',wash:'#eaf0e5',accent:'#476240',line:'#e2e8de',frame:'#dce2d7',mood:'A moment to slow down.',icon:'sun'},
+  Maghrib:{sky:'linear-gradient(160deg,#ebc9bc,#e8a48c)',ink:'#613e40',orb:'#ffdbad',glow:'#ffdbad66',hill:'#bb8585',paper:'#fcf8f6',text:'#393033',muted:'#75666a',wash:'#f5eae6',accent:'#8a5460',line:'#ede2de',frame:'#e4dad7',mood:'Let the day settle into gratitude.',icon:'sunset'},
+  Isha:{sky:'linear-gradient(145deg,#223350,#34466b)',ink:'#eef2fa',orb:'#e6ecf7',glow:'#eeebd022',hill:'#1c2b44',paper:'#151e30',text:'#e9edf5',muted:'#a8b5cb',wash:'#24324b',accent:'#b4c9ed',line:'#2a374e',frame:'#34425b',mood:'Find stillness under the stars.',icon:'moon'}
+};

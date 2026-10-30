@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/widget_root" android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:padding="20dp" android:background="@drawable/widget_fajr">
+    <TextView android:id="@+id/widget_label" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="NEXT ATHAN" android:textSize="11sp" android:letterSpacing="0.15" android:textColor="#394338" />
+    <TextView android:id="@+id/widget_prayer" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Open Athan" android:textSize="27sp" android:fontFamily="serif" android:textColor="#394338" android:layout_marginTop="7dp" />
+    <TextView android:id="@+id/widget_time" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Set your location" android:textSize="20sp" android:textColor="#394338" android:layout_marginTop="4dp" />
+    <TextView android:id="@+id/widget_location" android:layout_width="match_parent" android:layout_height="wrap_content" android:textSize="11sp" android:textColor="#394338" android:layout_marginTop="7dp" android:maxLines="1" android:ellipsize="end" />
+</LinearLayout>
