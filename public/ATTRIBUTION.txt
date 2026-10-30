@@ -1,0 +1,9 @@
+Quran: Quran JSON dataset https://quran-json.risanb.com/ Arabic text from Tanzil (CC BY 3.0; verbatim copying only); English: Marmaduke Pickthall, 1930, public domain. Arabic text preserved verbatim, including its copyright notice per surah. https://tanzil.net/docs/text_license
+
+Athan: ejaz215, Call to prayer from the Prophet mosque, CC BY 3.0. https://commons.wikimedia.org/wiki/File:33937_ejaz215_call-to-prayer-from-the-prophet-s-mo.ogg https://creativecommons.org/licenses/by/3.0/ Converted to mono 22.05 kHz MP3; iOS notification excerpt trimmed to 28 seconds.
+
+Prayer calculations: Adhan by Batoul Apps, MIT. https://github.com/batoulapps/adhan-js
+Icons: Lucide, ISC. https://lucide.dev/license
+
+Quran JSON packaging/metadata: Risan Bagja Pradana, CC BY-SA 4.0. https://github.com/risan/quran-json https://creativecommons.org/licenses/by-sa/4.0/
+
