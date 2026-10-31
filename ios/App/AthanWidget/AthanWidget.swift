@@ -77,7 +77,7 @@ private struct WidgetLandscape: View {
                     let cutCenter = CGPoint(x: center.x + radius * 0.7, y: center.y - radius * 0.4)
                     moon.fill(Path(ellipseIn: CGRect(x: cutCenter.x - cutRadius, y: cutCenter.y - cutRadius, width: cutRadius * 2, height: cutRadius * 2)), with: .color(.white))
                 }
-                for point in [CGPoint(x: 108, y: 17), CGPoint(x: 163, y: 12), CGPoint(x: 121, y: 38), CGPoint(x: 169, y: 44)] {
+                for point in [CGPoint(x: 108, y: 17), CGPoint(x: 163, y: 12), CGPoint(x: 109, y: 49), CGPoint(x: 169, y: 44)] {
                     let star = CGRect(x: point.x / 180 * size.width, y: point.y / 90 * size.height, width: max(1, scale), height: max(1, scale))
                     context.fill(Path(ellipseIn: star), with: .color(Color(widgetHex: 0xB4C9ED)))
                 }
