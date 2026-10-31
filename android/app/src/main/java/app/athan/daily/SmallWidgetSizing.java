@@ -30,7 +30,7 @@ final class SmallWidgetSizing {
         views.setViewPadding(R.id.widget_content, Math.round(inset*density), Math.round(4*density), Math.round(inset*density), Math.round(4*density));
     }
     private static float fit(Paint paint, String text, float maximum, float width, float scaledDensity, boolean serif) {
-        paint.setTypeface(android.graphics.Typeface.create(serif ? "serif" : "sans-serif", android.graphics.Typeface.NORMAL));
+        paint.setTypeface(android.graphics.Typeface.create(serif ? "serif" : "sans-serif", serif ? android.graphics.Typeface.BOLD : android.graphics.Typeface.NORMAL));
         paint.setTextSize(maximum * scaledDensity);
         return maximum * Math.min(1, width / Math.max(1, paint.measureText(text)));
     }

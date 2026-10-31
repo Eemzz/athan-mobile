@@ -115,7 +115,7 @@ struct PrayerWidgetView: View {
             Text("NEXT PRAYER")
                 .font(.system(size: family == .systemMedium ? 10 : 8, weight: .regular, design: .default))
             Text(entry.name)
-                .font(.custom("Georgia", size: family == .systemMedium ? 36 : 28))
+                .font(.custom("Georgia-Bold", size: family == .systemMedium ? 36 : 28))
                 .lineLimit(1)
                 .minimumScaleFactor(0.65)
             Text(clock)
