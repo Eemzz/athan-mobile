@@ -124,7 +124,7 @@ struct PrayerWidgetView: View {
                 .minimumScaleFactor(0.8)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-        .padding(.leading, 12)
+        .padding(.leading, 20)
         .padding(.trailing, 8)
         .padding(.vertical, 4)
         .foregroundStyle(Color(widgetHex: theme.night ? 0xEEF2FA : 0x394338))
