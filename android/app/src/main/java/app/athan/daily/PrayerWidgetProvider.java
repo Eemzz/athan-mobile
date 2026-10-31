@@ -19,6 +19,7 @@ import java.util.TimeZone;
 public class PrayerWidgetProvider extends AppWidgetProvider {
     public static final String REFRESH = "app.athan.daily.WIDGET_REFRESH";
     @Override public void onUpdate(Context context, AppWidgetManager manager, int[] ids) { updateAll(context); }
+    @Override public void onAppWidgetOptionsChanged(Context context, AppWidgetManager manager, int id, android.os.Bundle options) { updateAll(context); }
     @Override public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
         if (REFRESH.equals(intent.getAction()) || Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction()) || Intent.ACTION_TIME_CHANGED.equals(intent.getAction()) || Intent.ACTION_TIMEZONE_CHANGED.equals(intent.getAction())) updateAll(context);
@@ -51,7 +52,7 @@ public class PrayerWidgetProvider extends AppWidgetProvider {
             views.setInt(R.id.widget_root, "setBackgroundResource", background);
             views.setTextViewText(R.id.widget_prayer, name); views.setTextViewText(R.id.widget_time, clock);
             views.setTextViewText(R.id.widget_location, location);
-            views.setImageViewResource(R.id.widget_scene, name.equals("Fajr") ? R.drawable.widget_scene_fajr : name.equals("Dhuhr") ? R.drawable.widget_scene_dhuhr : name.equals("Maghrib") ? R.drawable.widget_scene_maghrib : name.equals("Isha") ? R.drawable.widget_scene_isha : R.drawable.widget_scene_asr);
+            views.setImageViewBitmap(R.id.widget_scene, WidgetArtwork.render(context, manager, id, name));
             views.setChronometer(R.id.widget_countdown, android.os.SystemClock.elapsedRealtime() + Math.max(0, at - System.currentTimeMillis()), "• In %s", at > 0);
             views.setChronometerCountDown(R.id.widget_countdown, true);
             views.setViewVisibility(R.id.widget_countdown, android.view.View.GONE);
