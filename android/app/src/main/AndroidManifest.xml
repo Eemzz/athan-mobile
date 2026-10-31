@@ -24,7 +24,7 @@
 
         </activity>
 
-        <receiver android:name=".PrayerWidgetProvider" android:exported="false" android:label="Athan — Next prayer">
+        <receiver android:name=".PrayerWidgetProvider" android:exported="false" android:label="Athan - Small">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
@@ -32,6 +32,15 @@
                 <action android:name="android.intent.action.TIMEZONE_CHANGED" />
             </intent-filter>
             <meta-data android:name="android.appwidget.provider" android:resource="@xml/prayer_widget_info" />
+        </receiver>
+        <receiver android:name=".LargePrayerWidgetProvider" android:exported="false" android:label="Athan - Large">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.TIME_SET" />
+                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/prayer_widget_large_info" />
         </receiver>
         <provider
             android:name="androidx.core.content.FileProvider"

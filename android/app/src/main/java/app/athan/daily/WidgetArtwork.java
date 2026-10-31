@@ -7,7 +7,7 @@ import android.os.Bundle;
 
 /** Draw the landscape at the launcher's actual size; circles never stretch or crop. */
 final class WidgetArtwork {
-    static Bitmap render(Context context, AppWidgetManager manager, int id, String prayer) {
+    static Bitmap render(Context context, AppWidgetManager manager, int id, String prayer, boolean small) {
         Bundle options = manager.getAppWidgetOptions(id);
         boolean landscape = context.getResources().getConfiguration().orientation == 2;
         int widthDp = options.getInt(landscape ? AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH : AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH, 180);
@@ -28,14 +28,14 @@ final class WidgetArtwork {
         paint.setShader(new LinearGradient(0, 0, 2f/width/denominator, 2f/height/denominator, Color.parseColor(start), Color.parseColor(end), Shader.TileMode.CLAMP));
         canvas.drawRect(0,0,width,height,paint);
         paint.setShader(null); paint.setColor(Color.parseColor(orb));
-        float radius = Math.min(width / 180f, height / 90f) * 16;
+        float radius = (height / 90f) * 16;
         if (prayer.equals("Isha")) {
             radius *= 11f/16;
             Path moon = new Path(); moon.addCircle(x*width,y*height,radius,Path.Direction.CW);
             Path cutout = new Path(); cutout.addCircle(x*width+radius*.7f,y*height-radius*.4f,radius*.95f,Path.Direction.CW);
             moon.op(cutout,Path.Op.DIFFERENCE); canvas.drawPath(moon,paint);
             paint.setColor(Color.parseColor("#B4C9ED"));
-            for(float[] star : new float[][]{{108,17},{163,12},{121,38},{169,44}}) canvas.drawCircle(star[0]/180*width,star[1]/90*height,Math.max(1, height/180f),paint);
+            for(float[] star : new float[][]{{small ? 98 : 108,17},{163,12},{small ? 111 : 121,38},{169,44}}) canvas.drawCircle(star[0]/180*width,star[1]/90*height,Math.max(1, height/180f),paint);
         } else canvas.drawCircle(x*width,y*height,radius,paint);
         Path mountains = new Path(); mountains.moveTo(0,78f/90*height);
         for(float[] point : new float[][]{{28,77},{51,81},{89,76},{117,67},{142,72},{180,61},{180,90},{0,90}}) mountains.lineTo(point[0]/180*width,point[1]/90*height);
