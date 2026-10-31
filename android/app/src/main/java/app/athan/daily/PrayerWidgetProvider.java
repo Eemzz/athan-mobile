@@ -26,7 +26,11 @@ public class PrayerWidgetProvider extends AppWidgetProvider {
     }
     public static void updateAll(Context context) {
         AppWidgetManager manager = AppWidgetManager.getInstance(context);
-        int[] ids = manager.getAppWidgetIds(new ComponentName(context, PrayerWidgetProvider.class));
+        int[] smallIds = manager.getAppWidgetIds(new ComponentName(context, PrayerWidgetProvider.class));
+        int[] largeIds = manager.getAppWidgetIds(new ComponentName(context, LargePrayerWidgetProvider.class));
+        int[] ids = new int[smallIds.length + largeIds.length];
+        System.arraycopy(smallIds, 0, ids, 0, smallIds.length);
+        System.arraycopy(largeIds, 0, ids, smallIds.length, largeIds.length);
         if (ids.length == 0) return;
         String name = "Set your location", clock = "Open Athan", location = "", zone = "UTC";
         long at = 0;
@@ -48,11 +52,12 @@ public class PrayerWidgetProvider extends AppWidgetProvider {
         if (name.equals("Isha")) background = R.drawable.widget_isha;
         int foreground = Color.parseColor(name.equals("Isha") ? "#EEF2FA" : "#394338");
         for (int id : ids) {
-            RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.prayer_widget);
+            boolean small = !manager.getAppWidgetInfo(id).provider.getClassName().equals(LargePrayerWidgetProvider.class.getName());
+            RemoteViews views = new RemoteViews(context.getPackageName(), small ? R.layout.prayer_widget : R.layout.prayer_widget_large);
             views.setInt(R.id.widget_root, "setBackgroundResource", background);
             views.setTextViewText(R.id.widget_prayer, name); views.setTextViewText(R.id.widget_time, clock);
             views.setTextViewText(R.id.widget_location, location);
-            views.setImageViewBitmap(R.id.widget_scene, WidgetArtwork.render(context, manager, id, name));
+            views.setImageViewBitmap(R.id.widget_scene, WidgetArtwork.render(context, manager, id, name, small));
             views.setChronometer(R.id.widget_countdown, android.os.SystemClock.elapsedRealtime() + Math.max(0, at - System.currentTimeMillis()), "• In %s", at > 0);
             views.setChronometerCountDown(R.id.widget_countdown, true);
             views.setViewVisibility(R.id.widget_countdown, android.view.View.GONE);
