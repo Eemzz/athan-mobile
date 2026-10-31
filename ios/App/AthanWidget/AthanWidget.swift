@@ -111,7 +111,7 @@ struct PrayerWidgetView: View {
         return formatter.string(from: date)
     }
     var body: some View {
-        VStack(alignment: .leading, spacing: 1) {
+        VStack(alignment: family == .systemSmall ? .center : .leading, spacing: 1) {
             Text("NEXT PRAYER")
                 .font(.system(size: family == .systemMedium ? 10 : 8, weight: .regular, design: .default))
             Text(entry.name)
@@ -123,9 +123,9 @@ struct PrayerWidgetView: View {
                 .lineLimit(1)
                 .minimumScaleFactor(0.8)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-        .padding(.leading, 20)
-        .padding(.trailing, 8)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: family == .systemSmall ? .center : .leading)
+        .padding(.leading, family == .systemSmall ? 12 : 20)
+        .padding(.trailing, family == .systemSmall ? 12 : 8)
         .padding(.vertical, 4)
         .foregroundStyle(Color(widgetHex: theme.night ? 0xEEF2FA : 0x394338))
         .containerBackground(for: .widget) { WidgetLandscape(theme: theme, small: family == .systemSmall) }
