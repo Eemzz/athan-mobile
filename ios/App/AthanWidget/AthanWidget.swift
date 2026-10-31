@@ -113,13 +113,13 @@ struct PrayerWidgetView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 1) {
             Text("NEXT PRAYER")
-                .font(.system(size: 8, weight: .regular, design: .default))
+                .font(.system(size: family == .systemMedium ? 10 : 8, weight: .regular, design: .default))
             Text(entry.name)
-                .font(.system(size: 28, weight: .bold, design: .default))
+                .font(.system(size: family == .systemMedium ? 36 : 28, weight: .bold, design: .default))
                 .lineLimit(1)
                 .minimumScaleFactor(0.65)
             Text(clock)
-                .font(.system(size: 13, weight: .regular, design: .default))
+                .font(.system(size: family == .systemMedium ? 17 : 13, weight: .regular, design: .default))
                 .lineLimit(1)
                 .minimumScaleFactor(0.8)
         }
