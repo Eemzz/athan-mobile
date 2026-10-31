@@ -2,15 +2,13 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="match_parent">
  <FrameLayout android:id="@+id/widget_root" android:layout_width="match_parent" android:layout_height="match_parent" android:background="@drawable/widget_asr" android:clipToOutline="true">
   <ImageView android:id="@+id/widget_scene" android:layout_width="match_parent" android:layout_height="match_parent" android:src="@drawable/widget_scene_day" android:scaleType="fitXY" android:importantForAccessibility="no" />
-  <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:paddingLeft="12dp" android:paddingRight="12dp" android:paddingTop="5dp" android:paddingBottom="5dp">
-   <TextView android:id="@+id/widget_label" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="NEXT ATHAN" android:textSize="9sp" android:letterSpacing="0.15" android:includeFontPadding="false" />
-   <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical">
-   <TextView android:id="@+id/widget_prayer" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="3dp" android:text="Asr" android:textSize="22sp" android:fontFamily="serif" android:maxLines="1" android:ellipsize="end" android:includeFontPadding="false" />
-   <TextView android:id="@+id/widget_time" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="6dp" android:text="3:47 PM" android:textSize="13sp" android:includeFontPadding="false" />
-   </LinearLayout>
-   <Chronometer android:id="@+id/widget_countdown" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="3dp" android:textSize="10sp" android:format="• In %s" android:includeFontPadding="false" />
-   <TextView android:id="@+id/widget_location" android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:visibility="gone" />
+  <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:gravity="center_vertical" android:padding="6dp">
+   <TextView android:id="@+id/widget_label" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="NEXT ATHAN" android:textSize="8sp" android:includeFontPadding="false" android:maxLines="1" />
+   <TextView android:id="@+id/widget_prayer" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="Asr" android:textSize="18sp" android:fontFamily="serif" android:maxLines="1" android:autoSizeTextType="uniform" android:autoSizeMinTextSize="12sp" android:autoSizeMaxTextSize="18sp" android:autoSizeStepGranularity="1sp" android:includeFontPadding="false" />
+   <TextView android:id="@+id/widget_time" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="3:47 PM" android:textSize="12sp" android:maxLines="1" android:includeFontPadding="false" />
+   <Chronometer android:id="@+id/widget_countdown" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:textSize="8sp" android:format="In %s" android:maxLines="1" android:includeFontPadding="false" />
+   <TextView android:id="@+id/widget_location" android:layout_width="wrap_content" android:layout_height="wrap_content" android:visibility="gone" />
+   <TextView android:id="@+id/widget_reflection" android:layout_width="wrap_content" android:layout_height="wrap_content" android:visibility="gone" />
   </LinearLayout>
-  <TextView android:id="@+id/widget_reflection" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_gravity="bottom" android:layout_marginLeft="12dp" android:layout_marginRight="8dp" android:layout_marginBottom="5dp" android:text="≋  A moment to slow down." android:textSize="10sp" android:maxLines="1" android:includeFontPadding="false" />
  </FrameLayout>
 </FrameLayout>
