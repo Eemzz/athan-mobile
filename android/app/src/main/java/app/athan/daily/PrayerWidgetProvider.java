@@ -49,6 +49,8 @@ public class PrayerWidgetProvider extends AppWidgetProvider {
         for (int id : ids) {
             RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.prayer_widget);
             views.setInt(R.id.widget_root, "setBackgroundResource", background);
+            views.setImageViewResource(R.id.widget_icon, name.equals("Fajr") ? R.drawable.widget_icon_sunrise : name.equals("Maghrib") ? R.drawable.widget_icon_sunset : name.equals("Isha") ? R.drawable.widget_icon_moon : R.drawable.widget_icon_sun);
+            views.setInt(R.id.widget_icon, "setColorFilter", foreground);
             views.setTextViewText(R.id.widget_prayer, name); views.setTextViewText(R.id.widget_time, clock);
             views.setTextViewText(R.id.widget_location, location);
             views.setImageViewResource(R.id.widget_scene, name.equals("Isha") ? R.drawable.widget_scene_night : R.drawable.widget_scene_day);
