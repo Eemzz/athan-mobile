@@ -65,7 +65,7 @@ private struct WidgetLandscape: View {
             let gradientEnd = CGPoint(x: 2 / size.width / denominator, y: 2 / size.height / denominator)
             context.fill(Path(bounds), with: .linearGradient(Gradient(colors: theme.sky), startPoint: .zero, endPoint: gradientEnd))
             let center = CGPoint(x: theme.position.x * size.width, y: theme.position.y * size.height)
-            let scale = min(size.width / 180, size.height / 90)
+            let scale = size.height / 90
             let radius = (size.height / 90) * (theme.night ? 11 : 16)
             let disk = Path(ellipseIn: CGRect(x: center.x - radius, y: center.y - radius, width: radius * 2, height: radius * 2))
             if theme.night {
