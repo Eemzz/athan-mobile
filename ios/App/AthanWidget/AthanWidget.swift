@@ -22,32 +22,112 @@ struct PrayerProvider: TimelineProvider {
         completion(Timeline(entries: entries, policy: .after(dates.last ?? now.addingTimeInterval(3600))))
     }
 }
+private extension Color {
+    init(widgetHex value: UInt32) {
+        self.init(.sRGB, red: Double((value >> 16) & 255) / 255,
+                  green: Double((value >> 8) & 255) / 255,
+                  blue: Double(value & 255) / 255, opacity: 1)
+    }
+}
+
+private struct WidgetTheme {
+    let sky: [Color]
+    let hill: Color
+    let orb: Color
+    let position: CGPoint
+    let night: Bool
+
+    init(prayer: String) {
+        night = prayer == "Isha"
+        let values: (UInt32, UInt32, UInt32, UInt32, CGFloat, CGFloat)
+        switch prayer {
+        case "Fajr": values = (0xDCE6F0, 0xF9DFC9, 0xBDC8C4, 0xFFF3D5, 120, 75)
+        case "Dhuhr": values = (0xF7EDC8, 0xEFDAA0, 0xD5C390, 0xFFF8D3, 137, 20)
+        case "Maghrib": values = (0xEBC9BC, 0xE8A48C, 0xBB8585, 0xFFDBAD, 162, 76)
+        case "Isha": values = (0x223350, 0x34466B, 0x1C2B44, 0xE6ECF7, 140, 30)
+        default: values = (0xE4EADB, 0xC9D5B7, 0xA7BB95, 0xF8F0C9, 150, 47)
+        }
+        sky = [Color(widgetHex: values.0), Color(widgetHex: values.1)]
+        hill = Color(widgetHex: values.2)
+        orb = Color(widgetHex: values.3)
+        position = CGPoint(x: values.4 / 180, y: values.5 / 90)
+    }
+}
+
+private struct WidgetLandscape: View {
+    let theme: WidgetTheme
+
+    var body: some View {
+        Canvas { context, size in
+            let bounds = CGRect(origin: .zero, size: size)
+            // Match Android's gradient, with equal horizontal and vertical contributions.
+            let denominator = 1 / (size.width * size.width) + 1 / (size.height * size.height)
+            let gradientEnd = CGPoint(x: 2 / size.width / denominator, y: 2 / size.height / denominator)
+            context.fill(Path(bounds), with: .linearGradient(Gradient(colors: theme.sky), startPoint: .zero, endPoint: gradientEnd))
+            let center = CGPoint(x: theme.position.x * size.width, y: theme.position.y * size.height)
+            let scale = min(size.width / 180, size.height / 90)
+            let radius = scale * (theme.night ? 11 : 16)
+            let disk = Path(ellipseIn: CGRect(x: center.x - radius, y: center.y - radius, width: radius * 2, height: radius * 2))
+            if theme.night {
+                // Remove a circle on an isolated layer to form a crescent without erasing the sky.
+                context.drawLayer { moon in
+                    moon.fill(disk, with: .color(theme.orb))
+                    moon.blendMode = .destinationOut
+                    let cutRadius = radius * 0.95
+                    let cutCenter = CGPoint(x: center.x + radius * 0.7, y: center.y - radius * 0.4)
+                    moon.fill(Path(ellipseIn: CGRect(x: cutCenter.x - cutRadius, y: cutCenter.y - cutRadius, width: cutRadius * 2, height: cutRadius * 2)), with: .color(.white))
+                }
+                for point in [CGPoint(x: 108, y: 17), CGPoint(x: 163, y: 12), CGPoint(x: 121, y: 38), CGPoint(x: 169, y: 44)] {
+                    let star = CGRect(x: point.x / 180 * size.width, y: point.y / 90 * size.height, width: max(1, scale), height: max(1, scale))
+                    context.fill(Path(ellipseIn: star), with: .color(Color(widgetHex: 0xB4C9ED)))
+                }
+            } else {
+                context.fill(disk, with: .color(theme.orb))
+            }
+            // Mountains are painted last so the dawn and sunset sit behind the horizon.
+            let points = [CGPoint(x: 0, y: 78), CGPoint(x: 28, y: 77), CGPoint(x: 51, y: 81), CGPoint(x: 89, y: 76), CGPoint(x: 117, y: 67), CGPoint(x: 142, y: 72), CGPoint(x: 180, y: 61), CGPoint(x: 180, y: 90), CGPoint(x: 0, y: 90)]
+            var mountains = Path()
+            for (index, point) in points.enumerated() {
+                let point = CGPoint(x: point.x / 180 * size.width, y: point.y / 90 * size.height)
+                if index == 0 { mountains.move(to: point) } else { mountains.addLine(to: point) }
+            }
+            mountains.closeSubpath()
+            context.fill(mountains, with: .color(theme.hill))
+        }
+        .accessibilityHidden(true)
+    }
+}
+
 struct PrayerWidgetView: View {
     let entry: PrayerEntry
-    var night: Bool { entry.name == "Isha" }
-    var colors: [Color] {
-        switch entry.name {
-        case "Fajr": return [Color(red:0.86,green:0.90,blue:0.94),Color(red:0.98,green:0.87,blue:0.79)]
-        case "Dhuhr": return [Color(red:0.97,green:0.93,blue:0.78),Color(red:0.94,green:0.85,blue:0.63)]
-        case "Maghrib": return [Color(red:0.92,green:0.79,blue:0.74),Color(red:0.91,green:0.64,blue:0.55)]
-        case "Isha": return [Color(red:0.13,green:0.20,blue:0.31),Color(red:0.20,green:0.27,blue:0.42)]
-        default: return [Color(red:0.89,green:0.92,blue:0.86),Color(red:0.79,green:0.84,blue:0.72)]
-        }
-    }
-    var clock: String {
-        guard let date = entry.at else { return "Refresh prayer times" }
-        let formatter = DateFormatter(); formatter.timeStyle = .short; formatter.timeZone = TimeZone(identifier: entry.timezone)
+    private var theme: WidgetTheme { WidgetTheme(prayer: entry.name) }
+    private var clock: String {
+        guard let date = entry.at else { return "Set your location" }
+        let formatter = DateFormatter()
+        formatter.timeStyle = .short
+        formatter.timeZone = TimeZone(identifier: entry.timezone)
         return formatter.string(from: date)
     }
     var body: some View {
-        VStack(alignment:.leading,spacing:7) {
-            HStack { Text("NEXT ATHAN").font(.system(size:10,weight:.medium)).tracking(2); Spacer(); Image(systemName:night ? "moon.stars" : "sun.max") }
-            Text(entry.name).font(.system(size:29,design:.serif))
-            HStack(alignment:.firstTextBaseline) { Text(clock).font(.system(size:21)); Spacer(); if let date = entry.at { Text(date,style:.relative).font(.caption) } }
-            Text(entry.location).font(.caption2).lineLimit(1)
+        VStack(alignment: .leading, spacing: 1) {
+            Text("NEXT PRAYER")
+                .font(.system(size: 8, weight: .regular, design: .default))
+            Text(entry.name)
+                .font(.system(size: 28, weight: .bold, design: .default))
+                .lineLimit(1)
+                .minimumScaleFactor(0.65)
+            Text(clock)
+                .font(.system(size: 13, weight: .regular, design: .default))
+                .lineLimit(1)
+                .minimumScaleFactor(0.8)
         }
-        .foregroundStyle(night ? Color(red:0.93,green:0.95,blue:0.98) : Color(red:0.22,green:0.27,blue:0.22))
-        .containerBackground(LinearGradient(colors:colors,startPoint:.topLeading,endPoint:.bottomTrailing),for:.widget)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+        .padding(.leading, 12)
+        .padding(.trailing, 8)
+        .padding(.vertical, 4)
+        .foregroundStyle(Color(widgetHex: theme.night ? 0xEEF2FA : 0x394338))
+        .containerBackground(for: .widget) { WidgetLandscape(theme: theme) }
+        .accessibilityElement(children: .combine)
     }
 }
 @main struct AthanWidget: Widget {
@@ -57,5 +137,7 @@ struct PrayerWidgetView: View {
             .configurationDisplayName("Athan — Next prayer")
             .description("Your next prayer, at a glance.")
             .supportedFamilies([.systemSmall,.systemMedium])
+            .contentMarginsDisabled()
+            .containerBackgroundRemovable(false)
     }
 }
