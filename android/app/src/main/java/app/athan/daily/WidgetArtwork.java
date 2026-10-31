@@ -28,7 +28,7 @@ final class WidgetArtwork {
         paint.setShader(new LinearGradient(0, 0, 2f/width/denominator, 2f/height/denominator, Color.parseColor(start), Color.parseColor(end), Shader.TileMode.CLAMP));
         canvas.drawRect(0,0,width,height,paint);
         paint.setShader(null); paint.setColor(Color.parseColor(orb));
-        float radius = (height / 90f) * 16;
+        float radius = small ? Math.min((height / 90f) * 16, width * 0.18f) : (height / 90f) * 16;
         if (prayer.equals("Isha")) {
             radius *= 11f/16;
             Path moon = new Path(); moon.addCircle(x*width,y*height,radius,Path.Direction.CW);

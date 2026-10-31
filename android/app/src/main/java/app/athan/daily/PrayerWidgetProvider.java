@@ -57,6 +57,7 @@ public class PrayerWidgetProvider extends AppWidgetProvider {
             views.setInt(R.id.widget_root, "setBackgroundResource", background);
             views.setTextViewText(R.id.widget_prayer, name); views.setTextViewText(R.id.widget_time, clock);
             views.setTextViewText(R.id.widget_location, location);
+            if (small) SmallWidgetSizing.apply(context, manager, id, views, name, clock);
             views.setImageViewBitmap(R.id.widget_scene, WidgetArtwork.render(context, manager, id, name, small));
             views.setChronometer(R.id.widget_countdown, android.os.SystemClock.elapsedRealtime() + Math.max(0, at - System.currentTimeMillis()), "• In %s", at > 0);
             views.setChronometerCountDown(R.id.widget_countdown, true);
