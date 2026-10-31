@@ -51,7 +51,7 @@ public class PrayerWidgetProvider extends AppWidgetProvider {
             views.setInt(R.id.widget_root, "setBackgroundResource", background);
             views.setTextViewText(R.id.widget_prayer, name); views.setTextViewText(R.id.widget_time, clock);
             views.setTextViewText(R.id.widget_location, location);
-            views.setImageViewResource(R.id.widget_scene, name.equals("Isha") ? R.drawable.widget_scene_night : R.drawable.widget_scene_day);
+            views.setImageViewResource(R.id.widget_scene, name.equals("Fajr") ? R.drawable.widget_scene_fajr : name.equals("Dhuhr") ? R.drawable.widget_scene_dhuhr : name.equals("Maghrib") ? R.drawable.widget_scene_maghrib : name.equals("Isha") ? R.drawable.widget_scene_isha : R.drawable.widget_scene_asr);
             views.setChronometer(R.id.widget_countdown, android.os.SystemClock.elapsedRealtime() + Math.max(0, at - System.currentTimeMillis()), "• In %s", at > 0);
             views.setChronometerCountDown(R.id.widget_countdown, true);
             views.setViewVisibility(R.id.widget_countdown, android.view.View.GONE);
