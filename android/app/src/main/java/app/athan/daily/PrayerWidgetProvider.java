@@ -51,8 +51,13 @@ public class PrayerWidgetProvider extends AppWidgetProvider {
             views.setInt(R.id.widget_root, "setBackgroundResource", background);
             views.setTextViewText(R.id.widget_prayer, name); views.setTextViewText(R.id.widget_time, clock);
             views.setTextViewText(R.id.widget_location, location);
-            views.setInt(R.id.widget_icon, "setColorFilter", foreground);
-            for (int textId : new int[]{R.id.widget_label, R.id.widget_prayer, R.id.widget_time, R.id.widget_location}) views.setTextColor(textId, foreground);
+            views.setImageViewResource(R.id.widget_scene, name.equals("Isha") ? R.drawable.widget_scene_night : R.drawable.widget_scene_day);
+            views.setChronometer(R.id.widget_countdown, android.os.SystemClock.elapsedRealtime() + Math.max(0, at - System.currentTimeMillis()), "• In %s", at > 0);
+            views.setChronometerCountDown(R.id.widget_countdown, true);
+            views.setViewVisibility(R.id.widget_countdown, at > 0 ? android.view.View.VISIBLE : android.view.View.GONE);
+            String reflection = name.equals("Fajr") ? "☀  A hopeful beginning." : name.equals("Dhuhr") ? "☀  Pause and reconnect." : name.equals("Maghrib") ? "☀  A moment of gratitude." : name.equals("Isha") ? "☾  Find rest in remembrance." : "≋  A moment to slow down.";
+            views.setTextViewText(R.id.widget_reflection, reflection);
+            for (int textId : new int[]{R.id.widget_label, R.id.widget_prayer, R.id.widget_time, R.id.widget_location, R.id.widget_countdown, R.id.widget_reflection}) views.setTextColor(textId, foreground);
             Intent launch = new Intent(context, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
             views.setOnClickPendingIntent(R.id.widget_root, PendingIntent.getActivity(context, 0, launch, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE));
             manager.updateAppWidget(id, views);
