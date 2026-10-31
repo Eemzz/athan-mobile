@@ -51,6 +51,7 @@ public class PrayerWidgetProvider extends AppWidgetProvider {
             views.setInt(R.id.widget_root, "setBackgroundResource", background);
             views.setTextViewText(R.id.widget_prayer, name); views.setTextViewText(R.id.widget_time, clock);
             views.setTextViewText(R.id.widget_location, location);
+            views.setInt(R.id.widget_icon, "setColorFilter", foreground);
             for (int textId : new int[]{R.id.widget_label, R.id.widget_prayer, R.id.widget_time, R.id.widget_location}) views.setTextColor(textId, foreground);
             Intent launch = new Intent(context, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
             views.setOnClickPendingIntent(R.id.widget_root, PendingIntent.getActivity(context, 0, launch, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE));
