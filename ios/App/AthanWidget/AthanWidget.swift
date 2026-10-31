@@ -66,7 +66,7 @@ private struct WidgetLandscape: View {
             context.fill(Path(bounds), with: .linearGradient(Gradient(colors: theme.sky), startPoint: .zero, endPoint: gradientEnd))
             let center = CGPoint(x: theme.position.x * size.width, y: theme.position.y * size.height)
             let scale = min(size.width / 180, size.height / 90)
-            let radius = scale * (theme.night ? 11 : 16)
+            let radius = (size.height / 90) * (theme.night ? 11 : 16)
             let disk = Path(ellipseIn: CGRect(x: center.x - radius, y: center.y - radius, width: radius * 2, height: radius * 2))
             if theme.night {
                 // Remove a circle on an isolated layer to form a crescent without erasing the sky.
