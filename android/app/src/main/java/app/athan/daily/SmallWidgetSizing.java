@@ -17,7 +17,7 @@ final class SmallWidgetSizing {
         float density = context.getResources().getDisplayMetrics().density;
         float scaledDensity = context.getResources().getDisplayMetrics().scaledDensity;
         int inset = width < 70 ? 6 : 8;
-        float available = Math.max(20, width - inset - 4);
+        float available = Math.max(20, width - inset * 2);
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         float labelSize = fit(paint, "NEXT PRAYER", 8, available * density, scaledDensity, false);
         float nameSize = fit(paint, prayer, 24, available * density, scaledDensity, true);
@@ -27,7 +27,7 @@ final class SmallWidgetSizing {
         views.setTextViewTextSize(R.id.widget_label, TypedValue.COMPLEX_UNIT_SP, labelSize * factor);
         views.setTextViewTextSize(R.id.widget_prayer, TypedValue.COMPLEX_UNIT_SP, nameSize * factor);
         views.setTextViewTextSize(R.id.widget_time, TypedValue.COMPLEX_UNIT_SP, timeSize * factor);
-        views.setViewPadding(R.id.widget_content, Math.round(inset*density), Math.round(4*density), Math.round(4*density), Math.round(4*density));
+        views.setViewPadding(R.id.widget_content, Math.round(inset*density), Math.round(4*density), Math.round(inset*density), Math.round(4*density));
     }
     private static float fit(Paint paint, String text, float maximum, float width, float scaledDensity, boolean bold) {
         paint.setTypeface(android.graphics.Typeface.create("sans-serif", bold ? android.graphics.Typeface.BOLD : android.graphics.Typeface.NORMAL));
