@@ -2,10 +2,24 @@ node_modules/
 dist/
 *.zip
 .DS_Store
-android/.gradle/
-android/local.properties
-android/**/build/
 ios/App/Pods/
 ios/**/xcuserdata/
 *.keystore
 *.jks
+
+# Android generated build files and local tooling
+android/**/build/
+android/**/.gradle/
+android/**/.idea/
+android/**/.cxx/
+android/**/.externalNativeBuild/
+android/**/local.properties
+android/**/*.apk
+android/**/*.aab
+android/**/*.aar
+android/**/*.ap_
+android/**/*.dex
+android/**/*.class
+android/**/*.hprof
+android/app/capacitor.build.gradle
+android/capacitor.settings.gradle
