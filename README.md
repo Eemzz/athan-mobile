@@ -35,13 +35,30 @@ Source organization: `src/app-template.ts` contains the screen markup, `src/sett
 
 The Quran and audio assets are already included. `npm run prepare:data` refreshes them from their documented sources and validates the Quran verse count. FFmpeg is a development dependency used to prepare the audio, not part of the mobile runtime. On Windows behind a corporate proxy, `NODE_USE_SYSTEM_CA=1` may be needed for npm and the data preparation script.
 
-### Android
+### Android: build from a fresh clone
 
-Requires Android SDK 36 and JDK 21. Set `JAVA_HOME` and `ANDROID_HOME`, or open the Android folder in a current Android Studio version.
+Requires Node.js 22+, Android Studio, Android SDK 36, and JDK 21. For command-line builds, set `JAVA_HOME` and `ANDROID_HOME`; Android Studio can manage the SDK location locally.
+
+From the repository root, run these commands before opening or building the Android project:
 
 ```sh
+npm ci
 npm run sync
 npm run prepare:native
+```
+
+`npm ci` installs the locked dependencies. `npm run sync` builds the web app, copies its assets into the native projects, and regenerates Capacitor's Android integration files:
+
+- `android/app/capacitor.build.gradle`
+- `android/capacitor.settings.gradle`
+
+These files are auto-generated and intentionally ignored by Git. Android build outputs, Gradle caches, and local SDK settings are also ignored. They are recreated locally as needed; do not copy them from someone else's computer or commit them. The required Gradle wrapper, build configuration, and native app/widget source are tracked.
+
+After preparation, open the repository's **`android` folder** in Android Studio, let Gradle sync, select an emulator or connected phone, and click **Run**. If Android Studio reports a missing Capacitor Gradle file, run `npm run sync` again from the repository root.
+
+Alternatively, build the APK from the command line:
+
+```sh
 cd android
 ./gradlew assembleDebug
 ```
