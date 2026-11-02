@@ -129,18 +129,6 @@ export function appTemplate(icon: (name: string) => string): string {
       <div class="setting-field">Notify for</div>
       <div class="prayer-toggles"></div>
       <p class="settings-note" id="schedule-status"></p>
-      <p class="settings-note">
-        iPhone alerts play a 28-second athan excerpt. Tap the notification to open the app and
-        listen to the full recording. Silent mode, Focus, and phone settings may silence alerts.
-      </p>
-      <p class="settings-note">
-        Themes change automatically with the next prayer. Your location stays on this device. Prayer
-        times use your selected calculation method; check them against your local mosque.
-      </p>
-      <p class="settings-note">
-        Home screen: add “Athan — Next prayer” from your phone’s widget picker. Open Athan regularly
-        to refresh upcoming reminders and widget times.
-      </p>
       <details>
         <summary>Sources & credits</summary>
         <p class="settings-note">
