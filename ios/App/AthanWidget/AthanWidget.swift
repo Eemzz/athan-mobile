@@ -111,15 +111,15 @@ struct PrayerWidgetView: View {
         return formatter.string(from: date)
     }
     var body: some View {
-        VStack(alignment: family == .systemSmall ? .center : .leading, spacing: 1) {
+        VStack(alignment: family == .systemSmall ? .center : .leading, spacing: family == .systemSmall ? 4 : 1) {
             Text("NEXT PRAYER")
-                .font(.system(size: family == .systemMedium ? 10 : 8, weight: .regular, design: .default))
+                .font(.system(size: family == .systemMedium ? 10 : 11, weight: .regular, design: .default))
             Text(entry.name)
-                .font(.custom("Georgia-Bold", size: family == .systemMedium ? 36 : 28))
+                .font(.custom("Georgia-Bold", size: family == .systemMedium ? 36 : 40))
                 .lineLimit(1)
                 .minimumScaleFactor(0.65)
             Text(clock)
-                .font(.system(size: family == .systemMedium ? 17 : 13, weight: .regular, design: .default))
+                .font(.system(size: family == .systemMedium ? 17 : 20, weight: .regular, design: .default))
                 .lineLimit(1)
                 .minimumScaleFactor(0.8)
         }
