@@ -56,15 +56,9 @@ public class PrayerWidgetProvider extends AppWidgetProvider {
             RemoteViews views = new RemoteViews(context.getPackageName(), small ? R.layout.prayer_widget : R.layout.prayer_widget_large);
             views.setInt(R.id.widget_root, "setBackgroundResource", background);
             views.setTextViewText(R.id.widget_prayer, name); views.setTextViewText(R.id.widget_time, clock);
-            views.setTextViewText(R.id.widget_location, location);
             if (small) SmallWidgetSizing.apply(context, manager, id, views, name, clock);
             views.setImageViewBitmap(R.id.widget_scene, WidgetArtwork.render(context, manager, id, name, small));
-            views.setChronometer(R.id.widget_countdown, android.os.SystemClock.elapsedRealtime() + Math.max(0, at - System.currentTimeMillis()), "• In %s", at > 0);
-            views.setChronometerCountDown(R.id.widget_countdown, true);
-            views.setViewVisibility(R.id.widget_countdown, android.view.View.GONE);
-            String reflection = name.equals("Fajr") ? "☀  A hopeful beginning." : name.equals("Dhuhr") ? "☀  Pause and reconnect." : name.equals("Maghrib") ? "☀  A moment of gratitude." : name.equals("Isha") ? "☾  Find rest in remembrance." : "≋  A moment to slow down.";
-            views.setTextViewText(R.id.widget_reflection, reflection);
-            for (int textId : new int[]{R.id.widget_label, R.id.widget_prayer, R.id.widget_time, R.id.widget_location, R.id.widget_countdown, R.id.widget_reflection}) views.setTextColor(textId, foreground);
+            for (int textId : new int[]{R.id.widget_label, R.id.widget_prayer, R.id.widget_time}) views.setTextColor(textId, foreground);
             Intent launch = new Intent(context, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
             views.setOnClickPendingIntent(R.id.widget_root, PendingIntent.getActivity(context, 0, launch, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE));
             manager.updateAppWidget(id, views);

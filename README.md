@@ -31,6 +31,8 @@ npm run sync
 npm run prepare:native
 ```
 
+Source organization: `src/app-template.ts` contains the screen markup, `src/settings.ts` restores preferences, and `src/quran.ts` handles Quran searches. Run `npm run format` before committing, or `npm run format:check` to check formatting. TypeScript also checks for unused declarations.
+
 The Quran and audio assets are already included. `npm run prepare:data` refreshes them from their documented sources and validates the Quran verse count. FFmpeg is a development dependency used to prepare the audio, not part of the mobile runtime. On Windows behind a corporate proxy, `NODE_USE_SYSTEM_CA=1` may be needed for npm and the data preparation script.
 
 ### Android

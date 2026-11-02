@@ -8,9 +8,6 @@
     <TextView android:id="@+id/widget_prayer" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="0dp" android:text="Asr" android:textStyle="bold" android:gravity="center" android:textSize="20sp" android:fontFamily="serif" android:maxLines="1" android:includeFontPadding="false" />
    </LinearLayout>
    <TextView android:id="@+id/widget_time" android:layout_width="match_parent" android:layout_height="wrap_content" android:fontFamily="sans-serif" android:text="3:47 PM" android:gravity="center" android:textSize="11sp" android:maxLines="1" android:includeFontPadding="false" />
-   <Chronometer android:id="@+id/widget_countdown" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="0dp" android:textSize="8sp" android:format="In %s" android:visibility="gone" android:maxLines="1" android:includeFontPadding="false" />
-   <TextView android:id="@+id/widget_location" android:layout_width="wrap_content" android:layout_height="wrap_content" android:visibility="gone" />
-   <TextView android:id="@+id/widget_reflection" android:layout_width="wrap_content" android:layout_height="wrap_content" android:visibility="gone" />
   </LinearLayout>
  </FrameLayout>
 </FrameLayout>
