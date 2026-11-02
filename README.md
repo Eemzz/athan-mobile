@@ -31,9 +31,17 @@ npm run sync
 npm run prepare:native
 ```
 
-Source organization: `src/app-template.ts` contains the screen markup, `src/settings.ts` restores preferences, and `src/quran.ts` handles Quran searches. Run `npm run format` before committing, or `npm run format:check` to check formatting. TypeScript also checks for unused declarations.
+Source organization: `src/app-template.ts` contains the screen markup, `src/settings.ts` restores preferences, and `src/quran.ts` loads and searches the Quran. Run `npm run format` before committing, or `npm run format:check` to check formatting. TypeScript also checks for unused declarations.
 
 The Quran and audio assets are already included. `npm run prepare:data` refreshes them from their documented sources and validates the Quran verse count. FFmpeg is a development dependency used to prepare the audio, not part of the mobile runtime. On Windows behind a corporate proxy, `NODE_USE_SYSTEM_CA=1` may be needed for npm and the data preparation script.
+
+Build output, caches, local IDE state, Capacitor-generated dependency wiring, and native audio copies are ignored by Git. After a fresh checkout, run `npm ci`, `npm run sync`, and `npm run prepare:native` before building either native project. Keep the original offline assets in `public/`, native source/project settings, and dependency lockfiles in version control.
+
+### Offline asset packaging
+
+Production builds store the Quran as lossless `quran.json.gz`, decompressed locally when the reader opens; all verses, translations, and source notices are preserved. Vite serves the same compressed endpoint during development. This uses the built-in `DecompressionStream` API in modern browsers and supported native WebViews, with no extra runtime dependency or network download.
+
+The full Beautiful Adhan MP3 remains unchanged. Its iOS-only notification WAV is excluded from web assets and copied directly into the iOS app by `npm run prepare:native`. Android retains its native raw MP3 resource for notification channels as well as the web playback file. Source/license files remain bundled; only the source manifest's JSON whitespace is removed. Packaging tests enforce a web bundle below 2 MiB; APK/IPA size also includes native code and native notification sounds.
 
 ### Android: build from a fresh clone
 

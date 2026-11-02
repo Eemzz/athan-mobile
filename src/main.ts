@@ -1,5 +1,5 @@
 import { appTemplate } from './app-template';
-import { findVerses, type Surah } from './quran';
+import { findVerses, loadQuran, type Surah } from './quran';
 import { restoreSettings } from './settings';
 import './design.css';
 import './mobile.css';
@@ -376,9 +376,7 @@ async function openQuran() {
   }
   $('.quran-results').textContent = 'Opening Quran…';
   try {
-    const r = await fetch('/quran.json');
-    if (!r.ok) throw Error();
-    quran = await r.json();
+    quran = await loadQuran();
     renderQuran();
   } catch {
     $('.quran-results').textContent = 'Unable to open the offline Quran. Please reopen the app.';

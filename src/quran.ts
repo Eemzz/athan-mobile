@@ -13,6 +13,17 @@ export interface Surah {
   verses: Verse[];
 }
 
+export async function loadQuran(): Promise<Surah[]> {
+  const response = await fetch('/quran.json.gz');
+  if (!response.ok || !response.body) {
+    throw new Error(`Unable to load offline Quran (${response.status}).`);
+  }
+  // HTTP servers may already have asked the browser to decompress the file.
+  if (response.headers.get('Content-Encoding')?.toLowerCase() === 'gzip') return response.json();
+  const text = response.body.pipeThrough(new DecompressionStream('gzip'));
+  return new Response(text).json();
+}
+
 /** Search references, Arabic, English, and surah names using the same normalization. */
 export function findVerses(quran: Surah[], query: string, selectedSurah = 0) {
   const term = normalize(query.trim());

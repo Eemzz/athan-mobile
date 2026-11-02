@@ -1,7 +1,15 @@
 node_modules/
 dist/
+coverage/
+.nyc_output/
+.vite/
+*.tsbuildinfo
+*.log
 *.zip
 .DS_Store
+._*
+*.swp
+*.swo
 ios/App/Pods/
 ios/**/xcuserdata/
 *.keystore
