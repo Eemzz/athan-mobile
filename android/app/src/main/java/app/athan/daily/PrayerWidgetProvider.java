@@ -28,9 +28,11 @@ public class PrayerWidgetProvider extends AppWidgetProvider {
         AppWidgetManager manager = AppWidgetManager.getInstance(context);
         int[] smallIds = manager.getAppWidgetIds(new ComponentName(context, PrayerWidgetProvider.class));
         int[] largeIds = manager.getAppWidgetIds(new ComponentName(context, LargePrayerWidgetProvider.class));
-        int[] ids = new int[smallIds.length + largeIds.length];
+        int[] markerIds = manager.getAppWidgetIds(new ComponentName(context, TimeMarkerWidgetProvider.class));
+        int[] ids = new int[smallIds.length + largeIds.length + markerIds.length];
         System.arraycopy(smallIds, 0, ids, 0, smallIds.length);
         System.arraycopy(largeIds, 0, ids, smallIds.length, largeIds.length);
+        System.arraycopy(markerIds, 0, ids, smallIds.length + largeIds.length, markerIds.length);
         if (ids.length == 0) return;
         String name = "Set your location", clock = "Open Athan", location = "", zone = "UTC";
         long at = 0;
@@ -52,6 +54,13 @@ public class PrayerWidgetProvider extends AppWidgetProvider {
         if (name.equals("Isha")) background = R.drawable.widget_isha;
         int foreground = Color.parseColor(name.equals("Isha") ? "#EEF2FA" : "#394338");
         for (int id : ids) {
+            if (manager.getAppWidgetInfo(id).provider.getClassName().equals(TimeMarkerWidgetProvider.class.getName())) {
+                RemoteViews markerViews = MarkerWidgetRenderer.views(context, manager, id);
+                Intent open = new Intent(context, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                markerViews.setOnClickPendingIntent(R.id.marker_root, PendingIntent.getActivity(context, 0, open, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE));
+                manager.updateAppWidget(id, markerViews);
+                continue;
+            }
             boolean small = !manager.getAppWidgetInfo(id).provider.getClassName().equals(LargePrayerWidgetProvider.class.getName());
             RemoteViews views = new RemoteViews(context.getPackageName(), small ? R.layout.prayer_widget : R.layout.prayer_widget_large);
             views.setInt(R.id.widget_root, "setBackgroundResource", background);
@@ -66,6 +75,6 @@ public class PrayerWidgetProvider extends AppWidgetProvider {
         AlarmManager alarms = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         PendingIntent pending = PendingIntent.getBroadcast(context, 24, new Intent(context, PrayerWidgetProvider.class).setAction(REFRESH), PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
         alarms.cancel(pending);
-        if (at > 0) alarms.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, at + 1000, pending);
+        if (at > 0) alarms.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, markerIds.length > 0 ? Math.min(at + 1000, System.currentTimeMillis() + 60000) : at + 1000, pending);
     }
 }

@@ -1,3 +1,4 @@
+import { mountMarkerSettings } from './widget-settings';
 import { appTemplate } from './app-template';
 import { findVerses, loadQuran, type Surah } from './quran';
 import { restoreSettings } from './settings';
@@ -139,9 +140,11 @@ function show(name: string) {
   if (name === 'quran') void openQuran();
   window.scrollTo({ top: 0 });
 }
+let refreshMarkerPreview = () => {};
 function refresh() {
   rows = schedule(settings, new Date(), 30);
   next = nextPrayer(rows);
+  refreshMarkerPreview();
   applyTheme(next?.name ?? 'Fajr');
   $('.location span').textContent = settings.location?.label ?? 'Set location';
   $('.date-label').textContent = new Intl.DateTimeFormat(undefined, {
@@ -452,6 +455,14 @@ $<HTMLInputElement>('#quran-search').oninput = () => {
     renderQuran();
   }, 150);
 };
+refreshMarkerPreview = mountMarkerSettings(
+  settings,
+  async () => {
+    await Preferences.set({ key: 'settings', value: JSON.stringify(settings) });
+    await syncWidgets(rows, settings);
+  },
+  () => next,
+);
 fillLocation();
 refresh();
 void sync(false);

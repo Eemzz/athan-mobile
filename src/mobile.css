@@ -313,3 +313,83 @@ button {
   margin: 0 0 28px;
   color: var(--ink);
 }
+
+#app .marker-settings {
+  margin: 24px 0;
+}
+#app .marker-preview {
+  border-radius: 18px;
+  background: var(--wash);
+  padding: 12px;
+}
+#app .marker-card {
+  border-radius: 16px;
+  padding: 16px;
+}
+#app .marker-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+#app .marker-top small {
+  font:
+    500 9px Arial,
+    sans-serif;
+  letter-spacing: 1px;
+  opacity: 0.8;
+}
+#app .marker-title {
+  display: flex;
+  gap: 9px;
+  align-items: center;
+}
+#app .marker-title strong {
+  font:
+    bold 30px Georgia,
+    serif;
+}
+#app .marker-clock {
+  font-size: 17px;
+}
+#app .marker-rail {
+  margin: 14px 0 8px;
+  height: 2px;
+  background: color-mix(in srgb, currentColor 20%, transparent);
+  position: relative;
+}
+#app .marker-rail span {
+  display: block;
+  width: 75%;
+  height: 2px;
+  background: currentColor;
+}
+#app .marker-rail b {
+  position: absolute;
+  left: 75%;
+  top: -2px;
+  width: 6px;
+  height: 6px;
+  background: currentColor;
+  border-radius: 50%;
+}
+#app .marker-caption {
+  font-size: 10px;
+  opacity: 0.8;
+}
+#app .marker-settings input[type='color'] {
+  height: 44px;
+  padding: 4px;
+}
+#app .marker-settings input[type='range'] {
+  padding: 0;
+  accent-color: var(--accent-ink);
+}
+
+#app .marker-clock {
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+#app .marker-title {
+  gap: 6px;
+}

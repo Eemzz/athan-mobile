@@ -2,13 +2,19 @@ import SwiftUI
 import WidgetKit
 
 struct StoredPrayer: Decodable { let name: String; let at: Double }
-struct StoredSchedule: Decodable { let location: String; let timezone: String; let prayers: [StoredPrayer] }
-struct PrayerEntry: TimelineEntry { let date: Date; let name: String; let at: Date?; let location: String; let timezone: String }
+struct StoredMarker: Decodable {
+    var textMode: String = "automatic"
+    var textColor: String = "#516a58"
+    var backgroundColor: String = "#ffffff"
+    var transparency: Double = 100
+}
+struct StoredSchedule: Decodable { let location: String; let timezone: String; let prayers: [StoredPrayer]; let marker: StoredMarker? }
+struct PrayerEntry: TimelineEntry { let date: Date; let name: String; let at: Date?; let location: String; let timezone: String; var marker: StoredMarker = StoredMarker(); var previous: StoredPrayer? = nil }
 struct PrayerProvider: TimelineProvider {
     func placeholder(in context: Context) -> PrayerEntry { PrayerEntry(date: Date(), name: "Asr", at: Date().addingTimeInterval(2400), location: "Your location", timezone: TimeZone.current.identifier) }
     func entry(at date: Date, schedule: StoredSchedule?) -> PrayerEntry {
         let next = schedule?.prayers.first(where: { $0.at / 1000 > date.timeIntervalSince1970 })
-        return PrayerEntry(date: date, name: next?.name ?? "Open Athan", at: next.map { Date(timeIntervalSince1970: $0.at / 1000) }, location: schedule?.location ?? "Set your location", timezone: schedule?.timezone ?? TimeZone.current.identifier)
+        return PrayerEntry(date: date, name: next?.name ?? "Open Athan", at: next.map { Date(timeIntervalSince1970: $0.at / 1000) }, location: schedule?.location ?? "Set your location", timezone: schedule?.timezone ?? TimeZone.current.identifier, marker: schedule?.marker ?? StoredMarker(), previous: schedule?.prayers.last(where: { $0.at / 1000 <= date.timeIntervalSince1970 }))
     }
     func load() -> StoredSchedule? {
         guard let value = UserDefaults(suiteName: "group.app.athan.daily")?.string(forKey: "prayerSchedule"), let data = value.data(using: .utf8) else { return nil }
@@ -18,8 +24,9 @@ struct PrayerProvider: TimelineProvider {
     func getTimeline(in context: Context, completion: @escaping (Timeline<PrayerEntry>) -> Void) {
         let now = Date(); let schedule = load()
         let dates = (schedule?.prayers ?? []).filter { $0.at / 1000 > now.timeIntervalSince1970 }.prefix(70).map { Date(timeIntervalSince1970: $0.at / 1000 + 1) }
-        let entries = ([now] + dates).map { entry(at: $0, schedule: schedule) }
-        completion(Timeline(entries: entries, policy: .after(dates.last ?? now.addingTimeInterval(3600))))
+        let minutes = (1...60).map { now.addingTimeInterval(Double($0) * 60) }
+        let entries = Array(Set([now] + dates + minutes)).sorted().map { entry(at: $0, schedule: schedule) }
+        completion(Timeline(entries: entries, policy: .after(now.addingTimeInterval(3600))))
     }
 }
 private extension Color {
@@ -132,7 +139,7 @@ struct PrayerWidgetView: View {
         .accessibilityElement(children: .combine)
     }
 }
-@main struct AthanWidget: Widget {
+struct AthanWidget: Widget {
     let kind = "AthanNextPrayer"
     var body: some WidgetConfiguration {
         StaticConfiguration(kind:kind,provider:PrayerProvider()) { PrayerWidgetView(entry:$0) }
@@ -142,4 +149,81 @@ struct PrayerWidgetView: View {
             .contentMarginsDisabled()
             .containerBackgroundRemovable(false)
     }
+}
+
+private struct TimeMarkerView: View {
+    @Environment(\.colorScheme) private var colorScheme
+    let entry: PrayerEntry
+    private func color(_ hex: String, fallback: UInt32) -> Color {
+        Color(widgetHex: UInt32(hex.trimmingCharacters(in: CharacterSet(charactersIn: "#")), radix: 16) ?? fallback)
+    }
+    private var ink: Color {
+        switch entry.marker.textMode {
+        case "custom": return color(entry.marker.textColor, fallback: 0x516A58)
+        case "light": return Color(widgetHex: 0xF4F5F7)
+        case "dark": return Color(widgetHex: 0x263239)
+        default: return Color(widgetHex: colorScheme == .dark ? 0xF4F5F7 : 0x263239)
+        }
+    }
+    private var icon: String {
+        switch entry.name { case "Fajr": return "sunrise"; case "Maghrib": return "sunset"; case "Isha": return "moon"; default: return "sun.max" }
+    }
+    private func clock(_ date: Date?) -> String {
+        guard let date else { return "Open Athan" }
+        let f = DateFormatter(); f.timeStyle = .short; f.timeZone = TimeZone(identifier: entry.timezone)
+        return f.string(from: date)
+    }
+    private var progress: Double {
+        guard let next = entry.at, let previous = entry.previous else { return 0 }
+        let start = Date(timeIntervalSince1970: previous.at / 1000)
+        return max(0, min(1, entry.date.timeIntervalSince(start) / max(1, next.timeIntervalSince(start))))
+    }
+    var body: some View {
+        VStack(spacing: 12) {
+            HStack(alignment: .center) {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("NEXT PRAYER").font(.system(size: 9, weight: .medium)).tracking(1.2).opacity(0.76)
+                    HStack(spacing: 10) {
+                        Text(entry.name).font(.custom("Georgia-Bold", size: 34)).lineLimit(1).minimumScaleFactor(0.6)
+                        Image(systemName: icon).font(.system(size: 19, weight: .light))
+                    }
+                }
+                Spacer(minLength: 12)
+                VStack(alignment: .trailing, spacing: 3) {
+                    Text(clock(entry.at)).font(.system(size: 19)).lineLimit(1).minimumScaleFactor(0.7)
+                    if let at = entry.at { Text(at, style: .relative).font(.system(size: 11)).opacity(0.76) }
+                }
+            }
+            GeometryReader { geometry in
+                ZStack(alignment: .leading) {
+                    Capsule().fill(ink.opacity(0.2)).frame(height: 2)
+                    Capsule().fill(ink).frame(width: geometry.size.width * progress, height: 2)
+                    Circle().fill(ink).frame(width: 6, height: 6).offset(x: max(0, min(geometry.size.width - 6, geometry.size.width * progress - 3)))
+                }.frame(maxHeight: .infinity)
+            }.frame(height: 6)
+            HStack {
+                Text(entry.previous.map { $0.name + " · " + clock(Date(timeIntervalSince1970: $0.at / 1000)) } ?? "Next prayer")
+                Spacer(minLength: 8)
+                Text(entry.name + " · " + clock(entry.at))
+            }.font(.system(size: 10)).opacity(0.76).lineLimit(1).minimumScaleFactor(0.75)
+        }
+        .padding(.horizontal, 16).padding(.vertical, 10)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .foregroundStyle(ink)
+        .containerBackground(for: .widget) {
+            color(entry.marker.backgroundColor, fallback: 0xFFFFFF).opacity(1 - max(0, min(100, entry.marker.transparency)) / 100)
+        }
+    }
+}
+struct TimeMarkerWidget: Widget {
+    var body: some WidgetConfiguration {
+        StaticConfiguration(kind: "AthanTimeMarker", provider: PrayerProvider()) { TimeMarkerView(entry: $0) }
+            .configurationDisplayName("Athan — Time marker")
+            .description("Next prayer, progress, and your choice of colors.")
+            .supportedFamilies([.systemMedium])
+            .contentMarginsDisabled()
+    }
+}
+@main struct AthanWidgetBundle: WidgetBundle {
+    var body: some Widget { AthanWidget(); TimeMarkerWidget() }
 }

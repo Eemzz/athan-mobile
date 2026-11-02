@@ -12,6 +12,7 @@ export async function syncWidgets(rows: Prayer[], settings: Settings): Promise<v
     schedule: JSON.stringify({
       location: settings.location?.label ?? '',
       timezone: settings.location?.timezone ?? 'UTC',
+      marker: settings.marker,
       prayers: rows.map((p) => ({ name: p.name, at: p.at.getTime() })),
     }),
   });

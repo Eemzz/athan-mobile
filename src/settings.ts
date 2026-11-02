@@ -1,3 +1,4 @@
+import { normalizeMarkerAppearance } from './widget-appearance';
 import { defaults, prayerNames, validLocation, type Settings } from './prayers';
 
 /** Restore saved preferences, falling back safely when storage is damaged. */
@@ -17,6 +18,7 @@ export function restoreSettings(value: string | null): Settings {
       ? settings.muted.filter((name) => prayerNames.includes(name))
       : [];
     settings.recording = 'beautiful';
+    settings.marker = normalizeMarkerAppearance(saved.marker);
     return settings;
   } catch {
     return { ...defaults };

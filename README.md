@@ -81,6 +81,10 @@ npm run ios
 
 In Xcode, select your Apple development team for both **App** and **AthanWidget**. Use unique bundle identifiers if needed and register the App Group `group.app.athan.daily` for both targets. If changing the group, update both entitlements plus the group string in `PrayerWidgetPlugin.swift` and `AthanWidget.swift`. Build/run on a device, allow notifications, and add the widget from the home screen. Distribution/TestFlight requires your Apple account and signing.
 
+## Time marker widget
+
+Add **Athan - Time marker** from the Android widget picker (2 × 1), or **Athan — Time marker** in the iPhone widget gallery (medium). In the app, open **Settings → Time marker widget** to choose automatic/light/dark/custom text, a background color, and 0–100% transparency. These preferences apply to all copies of the Time marker; the landscape widgets keep their existing appearance. Automatic text follows the device appearance, not the wallpaper. iOS may override backgrounds and colors in tinted or clear Home Screen modes. Widget refresh timing remains controlled by the OS.
+
 ## Platform limits
 
 - iOS notification sounds must be shorter than 30 seconds. This app bundles a 28-second athan excerpt for scheduled iOS notifications; the full recording is playable in the app. It does not claim to play a full three-minute athan automatically while a terminated iOS app is closed.
