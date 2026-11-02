@@ -1,3 +1,4 @@
+import { mountSettingsTabs, type SettingsTab } from './settings-tabs';
 import { mountMarkerSettings } from './widget-settings';
 import { appTemplate } from './app-template';
 import { findVerses, loadQuran, type Surah } from './quran';
@@ -129,7 +130,9 @@ function applyTheme(name: keyof typeof themes) {
   lastTheme = name;
 }
 app.innerHTML = appTemplate(icon);
-function show(name: string) {
+const selectSettingsTab = mountSettingsTabs(app);
+function show(name: string, tab?: SettingsTab) {
+  if (name === 'settings' && tab) selectSettingsTab(tab);
   screen = name;
   for (const s of ['today', 'quran', 'settings']) $('.' + s + '-screen').hidden = s !== name;
   app.querySelectorAll<HTMLButtonElement>('nav button').forEach((b) => {
@@ -254,15 +257,15 @@ async function locate() {
     show('today');
   } catch {
     message('Location unavailable. Choose a city or enter coordinates in Settings.', true);
-    show('settings');
+    show('settings', 'location');
   }
 }
 app
   .querySelectorAll<HTMLButtonElement>('nav button')
   .forEach((b) => (b.onclick = () => show(b.dataset.screen!)));
-$('.location').onclick = () => show('settings');
-$('.choose-location').onclick = () => show('settings');
-$('.alert-button').onclick = () => show('settings');
+$('.location').onclick = () => show('settings', 'location');
+$('.choose-location').onclick = () => show('settings', 'location');
+$('.alert-button').onclick = () => show('settings', 'alerts');
 app
   .querySelectorAll<HTMLButtonElement>('.locate')
   .forEach((b) => (b.onclick = () => void locate()));

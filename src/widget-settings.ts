@@ -16,7 +16,7 @@ export function mountMarkerSettings(
   <label class="setting-field">Background color<input id="marker-background" type="color"></label>
   <label class="setting-field">Transparency <output id="marker-transparency-label"></output><input id="marker-transparency" type="range" min="0" max="100" step="1"></label>
   <p class="settings-note">100% transparency hides the background. These settings apply to all Time marker widgets. Automatic text follows your phone’s light/dark theme. iOS may apply its own background or tint.</p>`;
-  document.querySelector('.settings-screen details')!.before(section);
+  document.querySelector('#settings-panel-widgets')!.append(section);
   const get = <T extends HTMLElement>(selector: string) => section.querySelector<T>(selector)!;
   function render() {
     const a = settings.marker,

@@ -393,3 +393,39 @@ button {
 #app .marker-title {
   gap: 6px;
 }
+
+#app .settings-tabs {
+  display: flex;
+  gap: 3px;
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: var(--paper);
+  padding: 8px 0 12px;
+  margin: 0 0 12px;
+}
+#app .settings-tabs button {
+  flex: 1;
+  min-width: 0;
+  padding: 10px 4px;
+  min-height: 44px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  color: var(--muted-ink);
+  font-size: 12px;
+  border-radius: 0;
+}
+#app .settings-tabs button[aria-selected='true'] {
+  color: var(--accent-ink);
+  border-bottom-color: var(--accent-ink);
+}
+#app [role='tabpanel'] {
+  padding-bottom: 16px;
+}
+#app #settings-panel-widgets .marker-settings {
+  margin-top: 0;
+}
+#app #settings-panel-about details {
+  margin-top: 0;
+}

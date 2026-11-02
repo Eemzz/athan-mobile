@@ -65,6 +65,14 @@ export function appTemplate(icon: (name: string) => string): string {
     <section class="settings-screen" hidden>
       <h1>Settings</h1>
       <p class="subtle">Make time for salah.</p>
+      <div class="settings-tabs" role="tablist" aria-label="Settings categories">
+        <button type="button" role="tab" id="settings-tab-location" data-settings-tab="location" aria-controls="settings-panel-location" aria-selected="true">Location</button>
+        <button type="button" role="tab" id="settings-tab-prayer" data-settings-tab="prayer" aria-controls="settings-panel-prayer" aria-selected="false" tabindex="-1">Prayer</button>
+        <button type="button" role="tab" id="settings-tab-alerts" data-settings-tab="alerts" aria-controls="settings-panel-alerts" aria-selected="false" tabindex="-1">Alerts</button>
+        <button type="button" role="tab" id="settings-tab-widgets" data-settings-tab="widgets" aria-controls="settings-panel-widgets" aria-selected="false" tabindex="-1">Widgets</button>
+        <button type="button" role="tab" id="settings-tab-about" data-settings-tab="about" aria-controls="settings-panel-about" aria-selected="false" tabindex="-1">About</button>
+      </div>
+      <div id="settings-panel-location" role="tabpanel" aria-labelledby="settings-tab-location" tabindex="0">
       <form id="location-form">
         <label class="setting-field"
           >City<select id="city">
@@ -106,6 +114,8 @@ export function appTemplate(icon: (name: string) => string): string {
         <button class="primary" type="submit">Save location</button
         ><button class="secondary locate" type="button">Use my location</button>
       </form>
+      </div>
+      <div id="settings-panel-prayer" role="tabpanel" aria-labelledby="settings-tab-prayer" tabindex="0" hidden>
       <label class="setting-field"
         >Calculation method<select id="method">
           <option value="NorthAmerica">ISNA / North America</option>
@@ -120,6 +130,8 @@ export function appTemplate(icon: (name: string) => string): string {
           <option value="hanafi">Hanafi</option>
         </select></label
       >
+      </div>
+      <div id="settings-panel-alerts" role="tabpanel" aria-labelledby="settings-tab-alerts" tabindex="0" hidden>
       <label class="setting-row"
         ><span>Prayer notifications</span><input id="alerts" type="checkbox" /></label
       ><label class="setting-row"
@@ -129,6 +141,9 @@ export function appTemplate(icon: (name: string) => string): string {
       <div class="setting-field">Notify for</div>
       <div class="prayer-toggles"></div>
       <p class="settings-note" id="schedule-status"></p>
+      </div>
+      <div id="settings-panel-widgets" role="tabpanel" aria-labelledby="settings-tab-widgets" tabindex="0" hidden></div>
+      <div id="settings-panel-about" role="tabpanel" aria-labelledby="settings-tab-about" tabindex="0" hidden>
       <details>
         <summary>Sources & credits</summary>
         <p class="settings-note">
@@ -139,6 +154,7 @@ export function appTemplate(icon: (name: string) => string): string {
           Prayer calculations: Batoul Apps Adhan (MIT). Icons: Lucide (ISC).
         </p>
       </details>
+      </div>
     </section>
   </main>
   <nav aria-label="Main navigation">
