@@ -47,14 +47,7 @@ npm run sync
 npm run prepare:native
 ```
 
-`npm ci` installs the locked dependencies. `npm run sync` builds the web app, copies its assets into the native projects, and regenerates Capacitor's Android integration files:
-
-- `android/app/capacitor.build.gradle`
-- `android/capacitor.settings.gradle`
-
-These files are auto-generated and intentionally ignored by Git. Android build outputs, Gradle caches, and local SDK settings are also ignored. They are recreated locally as needed; do not copy them from someone else's computer or commit them. The required Gradle wrapper, build configuration, and native app/widget source are tracked.
-
-After preparation, open the repository's **`android` folder** in Android Studio, let Gradle sync, select an emulator or connected phone, and click **Run**. If Android Studio reports a missing Capacitor Gradle file, run `npm run sync` again from the repository root.
+Open the repository's **`android` folder** in Android Studio, let Gradle sync, select an emulator or connected phone, and click **Run**.
 
 Alternatively, build the APK from the command line:
 
