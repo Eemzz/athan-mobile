@@ -1,4 +1,4 @@
-import { normalizeMarkerAppearance } from './widget-appearance';
+import { normalizeMarkerAppearance, normalizeLandscapeAppearance } from './widget-appearance';
 import { defaults, prayerNames, validLocation, type Settings } from './prayers';
 
 /** Restore saved preferences, falling back safely when storage is damaged. */
@@ -19,6 +19,10 @@ export function restoreSettings(value: string | null): Settings {
       : [];
     settings.recording = 'beautiful';
     settings.marker = normalizeMarkerAppearance(saved.marker);
+    settings.landscape = {
+      small: normalizeLandscapeAppearance(saved.landscape?.small),
+      large: normalizeLandscapeAppearance(saved.landscape?.large),
+    };
     return settings;
   } catch {
     return { ...defaults };

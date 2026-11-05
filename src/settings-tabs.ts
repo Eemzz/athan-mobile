@@ -1,4 +1,4 @@
-export type SettingsTab = 'location' | 'prayer' | 'alerts' | 'widgets' | 'about';
+export type SettingsTab = 'location' | 'prayer' | 'alerts' | 'widgets';
 
 export function mountSettingsTabs(root: HTMLElement) {
   const tabs = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-settings-tab]'));

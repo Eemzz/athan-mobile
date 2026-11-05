@@ -1,5 +1,7 @@
 import { mountSettingsTabs, type SettingsTab } from './settings-tabs';
 import { mountMarkerSettings } from './widget-settings';
+import { renderPrayerReminder } from './prayer-reminders';
+import { lunarSvg } from './lunar-phase';
 import { appTemplate } from './app-template';
 import { findVerses, loadQuran, type Surah } from './quran';
 import { restoreSettings } from './settings';
@@ -58,7 +60,8 @@ const icons = {
   ArrowLeft,
   Bookmark,
 };
-const icon = (name: string) => `<i data-lucide="${name}" aria-hidden="true"></i>`;
+const icon = (name: string) =>
+  name === 'moon' ? lunarSvg() : `<i data-lucide="${name}" aria-hidden="true"></i>`;
 const esc = (s: string) =>
   s.replace(
     /[&<>"']/g,
@@ -107,6 +110,30 @@ function message(text: string, error = false) {
 function drawIcons() {
   createIcons({ icons, attrs: { width: 18, height: 18, 'stroke-width': 1.6 } });
 }
+function positionHomeMoon() {
+  const orb = $<HTMLElement>('.sun-orb');
+  if (app.dataset.theme !== 'Isha') {
+    orb.hidden = false;
+    for (const property of ['top', 'width', 'height', 'mask-image', '-webkit-mask-image'])
+      orb.style.removeProperty(property);
+    return;
+  }
+  const mask =
+    'url("data:image/svg+xml,' +
+    encodeURIComponent(lunarSvg().replace('currentColor', 'black')) +
+    '")';
+  orb.style.maskImage = mask;
+  orb.style.webkitMaskImage = mask;
+  const scene = $('.hero').getBoundingClientRect();
+  const start = $('.home-time-marker').getBoundingClientRect().bottom + 4;
+  const end = $('.reminder-arabic').getBoundingClientRect().top - 4;
+  const size = Math.min(43, end - start);
+  orb.hidden = size < 16;
+  if (!orb.hidden) {
+    orb.style.width = orb.style.height = `${size}px`;
+    orb.style.top = `${start - scene.top + (end - start - size) / 2}px`;
+  }
+}
 function applyTheme(name: keyof typeof themes) {
   const t = themes[name];
   app.dataset.theme = name;
@@ -126,10 +153,14 @@ function applyTheme(name: keyof typeof themes) {
   }).forEach(([k, v]) => app.style.setProperty(k, v));
   document.body.style.background = t.paper;
   document.querySelector('meta[name=theme-color]')?.setAttribute('content', t.paper);
-  $('.mood').textContent = t.mood;
+  renderPrayerReminder(app, name);
+  requestAnimationFrame(positionHomeMoon);
   lastTheme = name;
 }
 app.innerHTML = appTemplate(icon);
+const moonLayoutObserver = new ResizeObserver(positionHomeMoon);
+moonLayoutObserver.observe($('.hero'));
+moonLayoutObserver.observe($('.reminder-arabic'));
 const selectSettingsTab = mountSettingsTabs(app);
 function show(name: string, tab?: SettingsTab) {
   if (name === 'settings' && tab) selectSettingsTab(tab);
@@ -192,10 +223,37 @@ function tick() {
     return;
   }
   if (!p) return;
+  const previous =
+    rows.filter((row) => row.at <= now).at(-1) ??
+    schedule(settings, new Date(now.getTime() - 86400000), 3)
+      .filter((row) => row.at <= now)
+      .at(-1);
+  const progress = previous
+    ? Math.max(
+        0,
+        Math.min(
+          1,
+          (now.getTime() - previous.at.getTime()) /
+            Math.max(1, p.at.getTime() - previous.at.getTime()),
+        ),
+      )
+    : 0;
+  const rail = $('.home-time-rail');
+  rail.style.setProperty('--prayer-progress', `${progress * 100}%`);
+  rail.setAttribute('aria-valuenow', String(Math.round(progress * 100)));
+  rail.setAttribute(
+    'aria-valuetext',
+    previous ? `${previous.name} to ${p.name}` : `Next: ${p.name}`,
+  );
+  $('.previous-prayer-time').textContent = previous
+    ? `${previous.name} · ${time(previous.at)}`
+    : '';
+  $('.next-prayer-time').textContent = `${p.name} · ${time(p.at)}`;
   const min = Math.max(1, Math.ceil((p.at.getTime() - now.getTime()) / 60000));
   $('.count-text').textContent =
     `In ${min >= 60 ? `${Math.floor(min / 60)}h ` : ''}${min % 60}m${dateKey(p.at) !== dateKey(now) ? ' · Tomorrow' : ''}`;
   if (lastTheme !== p.name) applyTheme(p.name);
+  positionHomeMoon();
 }
 async function sync(ask: boolean) {
   if (syncing) {
@@ -340,7 +398,7 @@ const beautifulCredit = document.createElement('p');
 beautifulCredit.className = 'settings-note';
 beautifulCredit.innerHTML =
   'Beautiful Adhan by Adam-synagda (2022), <a href="https://commons.wikimedia.org/wiki/File:Beautiful_adhan.ogg" target="_blank" rel="noopener">Wikimedia Commons</a>, <a href="https://creativecommons.org/publicdomain/zero/1.0/" target="_blank" rel="noopener">CC0 1.0</a>. Converted to mono MP3; the iOS notification excerpt is trimmed to 28 seconds.';
-$('.settings-screen details').append(beautifulCredit);
+$('#audio-credit').append(beautifulCredit);
 $('#preview-audio').onclick = async () => {
   try {
     if (audio.paused) {

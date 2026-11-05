@@ -9,6 +9,13 @@ import org.json.JSONObject;
 @CapacitorPlugin(name = "PrayerWidget")
 public class PrayerWidgetPlugin extends Plugin {
     @PluginMethod
+    public void scheduleAlerts(PluginCall call) {
+        try {
+            PrayerAlerts.schedule(getContext(), call.getString("schedule", "{\"prayers\":[]}"));
+            call.resolve();
+        } catch (Exception e) { call.reject("Could not schedule prayer reminders", e); }
+    }
+    @PluginMethod
     public void update(PluginCall call) {
         String schedule = call.getString("schedule");
         if (schedule == null) { call.reject("Missing prayer schedule"); return; }

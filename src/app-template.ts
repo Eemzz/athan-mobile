@@ -18,10 +18,7 @@ export function appTemplate(icon: (name: string) => string): string {
       </div>
       <div class="prayer-content">
         <div class="hero">
-          <div class="stars" aria-hidden="true">
-            ✦ &nbsp; · &nbsp; ✧<br />
-            · &nbsp; ✦ &nbsp; ·
-          </div>
+          <div class="stars" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
           <div class="sun-orb" aria-hidden="true"></div>
           <div class="land land-back" aria-hidden="true"></div>
           <div class="land land-front" aria-hidden="true"></div>
@@ -33,7 +30,15 @@ export function appTemplate(icon: (name: string) => string): string {
               <span class="pulse"></span><span class="count-text" aria-live="off"></span>
             </div>
           </div>
-          <div class="hero-bottom">${icon('wind')}<span class="mood"></span></div>
+          <div class="home-time-marker">
+            <div class="home-time-rail" role="progressbar" aria-label="Progress to next prayer" aria-valuemin="0" aria-valuemax="100"><span></span><b></b></div>
+            <div class="home-time-labels"><span class="previous-prayer-time"></span><span class="next-prayer-time"></span></div>
+          </div>
+          <div class="prayer-reminder">
+            <p class="reminder-arabic" lang="ar" dir="rtl"></p>
+            <h2 class="reminder-translation"></h2>
+            <p class="reminder-reference"></p>
+          </div>
         </div>
         <div class="section-heading">
           <h3>Prayer times</h3>
@@ -60,6 +65,10 @@ export function appTemplate(icon: (name: string) => string): string {
           placeholder="Surah, verse (2:255), or words"
       /></label>
       <div class="reader-meta">ARABIC + ENGLISH <span>Offline · Pickthall</span></div>
+      <details class="feature-credit">
+        <summary>Quran text sources</summary>
+        <p class="settings-note">Arabic: <a href="https://tanzil.net" target="_blank" rel="noopener">Tanzil Project</a>, preserved verbatim under <a href="https://creativecommons.org/licenses/by/3.0/" target="_blank" rel="noopener">CC BY 3.0</a>. English: Mohammed Marmaduke Pickthall (1930), public domain. Dataset and metadata: <a href="https://github.com/risan/quran-json" target="_blank" rel="noopener">Quran JSON by Risan Bagja Pradana</a>, <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a>.</p>
+      </details>
       <div class="quran-results" aria-live="polite"></div>
     </section>
     <section class="settings-screen" hidden>
@@ -70,7 +79,6 @@ export function appTemplate(icon: (name: string) => string): string {
         <button type="button" role="tab" id="settings-tab-prayer" data-settings-tab="prayer" aria-controls="settings-panel-prayer" aria-selected="false" tabindex="-1">Prayer</button>
         <button type="button" role="tab" id="settings-tab-alerts" data-settings-tab="alerts" aria-controls="settings-panel-alerts" aria-selected="false" tabindex="-1">Alerts</button>
         <button type="button" role="tab" id="settings-tab-widgets" data-settings-tab="widgets" aria-controls="settings-panel-widgets" aria-selected="false" tabindex="-1">Widgets</button>
-        <button type="button" role="tab" id="settings-tab-about" data-settings-tab="about" aria-controls="settings-panel-about" aria-selected="false" tabindex="-1">About</button>
       </div>
       <div id="settings-panel-location" role="tabpanel" aria-labelledby="settings-tab-location" tabindex="0">
       <form id="location-form">
@@ -130,6 +138,7 @@ export function appTemplate(icon: (name: string) => string): string {
           <option value="hanafi">Hanafi</option>
         </select></label
       >
+      <p class="settings-note feature-credit">Prayer calculations by <a href="https://github.com/batoulapps/adhan-js" target="_blank" rel="noopener">Batoul Apps · Adhan</a> (MIT).</p>
       </div>
       <div id="settings-panel-alerts" role="tabpanel" aria-labelledby="settings-tab-alerts" tabindex="0" hidden>
       <label class="setting-row"
@@ -138,23 +147,12 @@ export function appTemplate(icon: (name: string) => string): string {
         ><span>Athan sound</span><input id="sound" type="checkbox" /></label
       ><button class="secondary" id="preview-audio">Listen to athan</button
       ><button class="secondary" id="exact-alarm" hidden>Allow precise reminders</button>
+      <details class="feature-credit" id="audio-credit"><summary>Athan recording credit</summary></details>
       <div class="setting-field">Notify for</div>
       <div class="prayer-toggles"></div>
       <p class="settings-note" id="schedule-status"></p>
       </div>
       <div id="settings-panel-widgets" role="tabpanel" aria-labelledby="settings-tab-widgets" tabindex="0" hidden></div>
-      <div id="settings-panel-about" role="tabpanel" aria-labelledby="settings-tab-about" tabindex="0" hidden>
-      <details>
-        <summary>Sources & credits</summary>
-        <p class="settings-note">
-          Arabic: <a href="https://tanzil.net" target="_blank" rel="noopener">Tanzil Project</a>,
-          text preserved verbatim, CC BY 3.0. English: Mohammed Marmaduke Pickthall (1930), public
-          domain. Dataset:
-          <a href="https://quran-json.risanb.com/" target="_blank" rel="noopener">Quran JSON</a>.
-          Prayer calculations: Batoul Apps Adhan (MIT). Icons: Lucide (ISC).
-        </p>
-      </details>
-      </div>
     </section>
   </main>
   <nav aria-label="Main navigation">

@@ -24,6 +24,12 @@ public class PrayerWidgetProvider extends AppWidgetProvider {
         super.onReceive(context, intent);
         if (REFRESH.equals(intent.getAction()) || Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction()) || Intent.ACTION_TIME_CHANGED.equals(intent.getAction()) || Intent.ACTION_TIMEZONE_CHANGED.equals(intent.getAction())) updateAll(context);
     }
+    private static CharSequence styled(String text, String font, boolean bold) {
+        android.text.SpannableString value = new android.text.SpannableString(text);
+        value.setSpan(new android.text.style.TypefaceSpan(font),0,text.length(),0);
+        value.setSpan(new android.text.style.StyleSpan(bold ? android.graphics.Typeface.BOLD : android.graphics.Typeface.NORMAL),0,text.length(),0);
+        return value;
+    }
     public static void updateAll(Context context) {
         AppWidgetManager manager = AppWidgetManager.getInstance(context);
         int[] smallIds = manager.getAppWidgetIds(new ComponentName(context, PrayerWidgetProvider.class));
@@ -35,9 +41,11 @@ public class PrayerWidgetProvider extends AppWidgetProvider {
         System.arraycopy(markerIds, 0, ids, smallIds.length + largeIds.length, markerIds.length);
         if (ids.length == 0) return;
         String name = "Set your location", clock = "Open Athan", location = "", zone = "UTC";
+        JSONObject landscapeAppearance = new JSONObject();
         long at = 0;
         try {
             JSONObject data = new JSONObject(context.getSharedPreferences("athan_widget", 0).getString("schedule", "{}"));
+            if (data.optJSONObject("landscape") != null) landscapeAppearance = data.optJSONObject("landscape");
             location = data.optString("location", ""); zone = data.optString("timezone", "UTC");
             JSONArray prayers = data.optJSONArray("prayers");
             if (prayers != null) for (int i = 0; i < prayers.length(); i++) {
@@ -63,11 +71,27 @@ public class PrayerWidgetProvider extends AppWidgetProvider {
             }
             boolean small = !manager.getAppWidgetInfo(id).provider.getClassName().equals(LargePrayerWidgetProvider.class.getName());
             RemoteViews views = new RemoteViews(context.getPackageName(), small ? R.layout.prayer_widget : R.layout.prayer_widget_large);
-            views.setInt(R.id.widget_root, "setBackgroundResource", background);
+            JSONObject appearance = landscapeAppearance.optJSONObject(small ? "small" : "large");
+            if (appearance == null) appearance = new JSONObject();
+            String font = appearance.optString("fontFamily", "serif").equals("sans-serif") ? "sans-serif" : "serif";
+            int opacity = Math.max(0, Math.min(100, appearance.optInt("opacity",100)));
+            views.setInt(R.id.widget_root, "setBackgroundResource", 0);
             views.setTextViewText(R.id.widget_prayer, name); views.setTextViewText(R.id.widget_time, clock);
-            if (small) SmallWidgetSizing.apply(context, manager, id, views, name, clock);
-            views.setImageViewBitmap(R.id.widget_scene, WidgetArtwork.render(context, manager, id, name, small));
-            for (int textId : new int[]{R.id.widget_label, R.id.widget_prayer, R.id.widget_time}) views.setTextColor(textId, foreground);
+            if (small) SmallWidgetSizing.apply(context, manager, id, views, name, clock, font);
+            else if (name.equals("Isha")) {
+                android.os.Bundle options=manager.getAppWidgetOptions(id);
+                boolean landscape=context.getResources().getConfiguration().orientation==2;
+                float width=options.getInt(landscape?AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH:AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH,180);
+                float height=options.getInt(landscape?AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT:AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT,90);
+                float density=context.getResources().getDisplayMetrics().density;
+                float right=width*(1-140f/180)+height/90f*11+8;
+                views.setViewPadding(R.id.widget_content,Math.round(20*density),Math.round(4*density),Math.round(right*density),Math.round(4*density));
+            }
+            views.setImageViewBitmap(R.id.widget_scene, WidgetArtwork.render(context, manager, id, name, small, opacity));
+            views.setTextViewText(R.id.widget_label, styled("NEXT PRAYER", font, false));
+            views.setTextViewText(R.id.widget_prayer, styled(name, font, true));
+            views.setTextViewText(R.id.widget_time, styled(clock, font, false));
+            for (int textId : new int[]{R.id.widget_label, R.id.widget_prayer, R.id.widget_time}) views.setTextColor(textId, foreground | 0xff000000);
             Intent launch = new Intent(context, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
             views.setOnClickPendingIntent(R.id.widget_root, PendingIntent.getActivity(context, 0, launch, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE));
             manager.updateAppWidget(id, views);
@@ -75,6 +99,6 @@ public class PrayerWidgetProvider extends AppWidgetProvider {
         AlarmManager alarms = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         PendingIntent pending = PendingIntent.getBroadcast(context, 24, new Intent(context, PrayerWidgetProvider.class).setAction(REFRESH), PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
         alarms.cancel(pending);
-        if (at > 0) alarms.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, markerIds.length > 0 ? Math.min(at + 1000, System.currentTimeMillis() + 60000) : at + 1000, pending);
+        if (at > 0) alarms.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, markerIds.length > 0 ? Math.min(at + 1000, System.currentTimeMillis() + 60000) : Math.min(at + 1000, System.currentTimeMillis() + 21600000), pending);
     }
 }

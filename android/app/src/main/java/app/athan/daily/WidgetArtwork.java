@@ -7,7 +7,7 @@ import android.os.Bundle;
 
 /** Draw the landscape at the launcher's actual size; circles never stretch or crop. */
 final class WidgetArtwork {
-    static Bitmap render(Context context, AppWidgetManager manager, int id, String prayer, boolean small) {
+    static Bitmap render(Context context, AppWidgetManager manager, int id, String prayer, boolean small, int opacity) {
         Bundle options = manager.getAppWidgetOptions(id);
         boolean landscape = context.getResources().getConfiguration().orientation == 2;
         int widthDp = options.getInt(landscape ? AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH : AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH, 180);
@@ -22,6 +22,9 @@ final class WidgetArtwork {
         if (prayer.equals("Isha")) { start="#223350"; end="#34466B"; hill="#1C2B44"; orb="#E6ECF7"; x=140f/180; y=30f/90; }
         Bitmap image = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(image);
+        Path outline = new Path(); outline.addRoundRect(0,0,width,height, height*.16f,height*.16f,Path.Direction.CW);
+        canvas.clipPath(outline);
+        canvas.saveLayerAlpha(0,0,width,height,Math.round(opacity*2.55f));
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         // Equal horizontal and vertical contributions, matching the preview gradient.
         float denominator = 1f/(width*width) + 1f/(height*height);
@@ -31,15 +34,22 @@ final class WidgetArtwork {
         float radius = small ? Math.min((height / 90f) * 16, width * 0.18f) : (height / 90f) * 16;
         if (prayer.equals("Isha")) {
             radius *= 11f/16;
-            Path moon = new Path(); moon.addCircle(x*width,y*height,radius,Path.Direction.CW);
-            Path cutout = new Path(); cutout.addCircle(x*width+radius*.7f,y*height-radius*.4f,radius*.95f,Path.Direction.CW);
-            moon.op(cutout,Path.Op.DIFFERENCE); canvas.drawPath(moon,paint);
+            if (small) { y=12f/90; radius=Math.min(radius,height/90f*8); }
+
+            NightMoon.draw(context,canvas,paint,x*width,y*height,radius);
             paint.setColor(Color.parseColor("#B4C9ED"));
-            for(float[] star : new float[][]{{small ? 98 : 108,17},{163,12},{small ? 111 : 121,38},{169,44}}) canvas.drawCircle(star[0]/180*width,star[1]/90*height,Math.max(1, height/180f),paint);
+            for(float[] star : new float[][]{{18,12,.45f,.45f},{45,8,.65f,.7f},{76,15,1f,1f},{108,9,.45f,.45f},{159,10,.65f,.7f},{167,29,.45f,.45f},{24,32,.65f,.7f},{57,27,.45f,.45f},{93,34,.8f,.9f},{115,46,.45f,.45f},{158,51,.8f,.9f},{17,56,.45f,.45f},{46,49,1.05f,1f},{76,60,.45f,.45f},{101,62,.65f,.7f},{169,61,.45f,.45f}}) {
+                float sx=star[0]/180*width, sy=star[1]/90*height;
+                float starRadius=Math.max(1, height/90f*star[2]);
+                if(Math.hypot(sx-x*width,sy-y*height)<radius+starRadius+height/45f) continue;
+                paint.setAlpha(Math.round(255*star[3]));
+                canvas.drawCircle(sx,sy,starRadius,paint);
+            }
         } else canvas.drawCircle(x*width,y*height,radius,paint);
         Path mountains = new Path(); mountains.moveTo(0,78f/90*height);
         for(float[] point : new float[][]{{28,77},{51,81},{89,76},{117,67},{142,72},{180,61},{180,90},{0,90}}) mountains.lineTo(point[0]/180*width,point[1]/90*height);
         mountains.close(); paint.setColor(Color.parseColor(hill)); canvas.drawPath(mountains,paint);
+        canvas.restore();
         return image;
     }
 }

@@ -1,4 +1,8 @@
-import { defaultMarkerAppearance, type MarkerAppearance } from './widget-appearance';
+import {
+  defaultMarkerAppearance,
+  type MarkerAppearance,
+  type LandscapeAppearance,
+} from './widget-appearance';
 import { Coordinates, CalculationMethod, Madhab, PrayerTimes } from 'adhan';
 import type { RecordingId } from './recordings';
 export const prayerNames = ['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'] as const;
@@ -19,6 +23,7 @@ export interface Settings {
   recording: RecordingId;
   muted: PrayerName[];
   marker: MarkerAppearance;
+  landscape: { small: LandscapeAppearance; large: LandscapeAppearance };
 }
 export interface Prayer {
   name: PrayerName;
@@ -33,6 +38,10 @@ export const defaults: Settings = {
   recording: 'beautiful',
   muted: [],
   marker: { ...defaultMarkerAppearance },
+  landscape: {
+    small: { fontFamily: 'serif', opacity: 100 },
+    large: { fontFamily: 'serif', opacity: 100 },
+  },
 };
 export function dateInZone(now: Date, timezone: string, offset = 0): Date {
   const parts = new Intl.DateTimeFormat('en-CA', {

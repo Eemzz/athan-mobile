@@ -297,7 +297,6 @@ button {
   }
 }
 #app .onboarding .welcome-arabic {
-  font-family: 'Noto Naskh Arabic', 'Geeza Pro', 'Traditional Arabic', serif;
   font-size: 40px;
   font-weight: 400;
   line-height: 1.8;
@@ -428,4 +427,537 @@ button {
 }
 #app #settings-panel-about details {
   margin-top: 0;
+}
+
+#app .color-picker {
+  width: 100%;
+  margin-top: 10px;
+}
+#app .color-swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+#app .color-swatches button {
+  width: 36px;
+  height: 36px;
+  min-height: 36px;
+  padding: 0;
+  border-radius: 50%;
+  background: var(--swatch);
+  border: 2px solid #0002;
+}
+#app .color-swatches button[aria-pressed='true'] {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+}
+#app .color-picker details {
+  margin-top: 18px;
+}
+#app .color-picker summary {
+  cursor: pointer;
+  font-size: 13px;
+}
+#app .color-value {
+  float: right;
+  opacity: 0.65;
+  font-variant-numeric: tabular-nums;
+}
+#app .color-custom {
+  display: grid;
+  gap: 12px;
+  padding-top: 14px;
+}
+#app .color-custom label {
+  display: grid;
+  gap: 6px;
+  font-size: 12px;
+}
+#app .color-custom input[type='text'] {
+  width: 100%;
+  font-size: 16px;
+}
+#app .color-custom input[aria-invalid='true'] {
+  outline: 2px solid #bb5555;
+}
+
+#app .color-wheel {
+  position: relative;
+  width: min(100%, 220px);
+  aspect-ratio: 1;
+  margin: 8px auto;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle closest-side, white, #ffffff00),
+    conic-gradient(from 90deg, red, #ff0, #0f0, #0ff, #00f, #f0f, red);
+  touch-action: none;
+  cursor: crosshair;
+  box-shadow: 0 0 0 1px #0001;
+}
+#app .color-wheel::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: #000;
+  opacity: var(--wheel-value, 0);
+  pointer-events: none;
+}
+#app .color-wheel-thumb {
+  position: absolute;
+  z-index: 1;
+  width: 20px;
+  height: 20px;
+  border: 3px solid white;
+  border-radius: 50%;
+  box-shadow: 0 1px 5px #0008;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+#app .color-custom small {
+  text-align: center;
+  color: var(--muted-ink);
+  font-size: 11px;
+}
+#app .color-accessible:not(:focus-within) {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+#app .color-brightness {
+  border-radius: 20px;
+}
+
+#app .marker-card {
+  font-family: var(--marker-font, Georgia, serif);
+}
+#app .marker-title strong {
+  font-family: inherit;
+  font-size: clamp(28px, 9vw, 38px);
+}
+#app .marker-top {
+  width: 100%;
+  gap: 8px;
+}
+#app .marker-clock {
+  font-size: clamp(17px, 5vw, 21px);
+}
+#app .marker-card small {
+  font-family: inherit;
+  font-size: 10px;
+}
+
+#app .marker-card small,
+#app .marker-caption {
+  opacity: 1;
+}
+
+#app .widget-chooser {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  margin-bottom: 24px;
+  border-radius: 16px;
+  background: #8881;
+}
+#app .widget-chooser button {
+  flex: 1;
+  min-width: 0;
+  min-height: 44px;
+  padding: 10px 5px;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--muted-ink);
+  font-size: 12px;
+}
+#app .widget-chooser button[aria-pressed='true'] {
+  background: var(--paper);
+  color: var(--accent-ink);
+  font-weight: 600;
+  box-shadow: 0 1px 4px #0001;
+}
+#app .widget-design-panel[hidden] {
+  display: none !important;
+}
+#app .widget-design-panel h3 {
+  margin: 0 0 20px;
+}
+#app .widget-design-panel .setting-field {
+  margin-bottom: 20px;
+}
+
+#app .landscape-preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 164px;
+  padding: 18px 10px;
+  margin-bottom: 22px;
+  border-radius: 20px;
+  background: var(--paper);
+}
+#app .landscape-preview canvas {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+#app .landscape-preview-small {
+  width: 112px;
+}
+#app .landscape-preview-large {
+  width: 252px;
+}
+
+#app .marker-preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 164px;
+  padding: 18px 10px;
+  margin-bottom: 22px;
+  border-radius: 20px;
+  background: var(--paper);
+}
+#app .marker-preview .marker-card {
+  width: 252px;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 12px;
+  border-radius: 18px;
+}
+#app .marker-preview .marker-title strong {
+  font-size: 28px;
+}
+#app .marker-preview .marker-clock {
+  font-size: 17px;
+}
+#app .marker-preview .marker-caption {
+  font-size: 10px;
+}
+
+#app .feature-credit {
+  margin: 14px 0 20px;
+  font-size: 11px;
+  color: var(--muted-ink);
+}
+#app .feature-credit summary {
+  cursor: pointer;
+  font-size: 11px;
+}
+#app .feature-credit a {
+  color: inherit;
+  text-underline-offset: 3px;
+}
+
+/* Keep the original 255px scene; only the content arrangement changes. */
+#app .hero {
+  display: flex;
+  flex-direction: column;
+  height: 255px;
+}
+#app .hero-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px 12px;
+  padding: 14px 18px 8px;
+  flex-shrink: 0;
+}
+#app .hero-content .eyebrow {
+  grid-column: 1 / -1;
+  font-size: 8px;
+  letter-spacing: 1.5px;
+}
+#app .hero h1 {
+  grid-row: 2 / 4;
+  margin: 1px 0;
+  font-size: 30px;
+  line-height: 1.1;
+}
+#app .hero-time {
+  grid-column: 2;
+  grid-row: 2;
+  text-align: right;
+  font-size: 16px;
+}
+#app .hero-time > span {
+  font-size: 10px;
+}
+#app .hero .countdown {
+  grid-column: 2;
+  grid-row: 3;
+  justify-content: flex-end;
+  text-align: right;
+  font-size: 10px;
+  margin-top: 0;
+  gap: 4px;
+}
+#app .prayer-reminder {
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  min-height: 0;
+  padding: 2px 16px 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  color: var(--hero-ink);
+}
+#app .reminder-arabic {
+  font-size: 16px;
+  line-height: 1.5;
+  margin: 0 0 6px;
+  font-weight: 400;
+}
+#app .reminder-translation {
+  font:
+    400 10px/1.4 Arial,
+    sans-serif;
+  margin: 0;
+  color: inherit;
+}
+#app .reminder-reference {
+  font:
+    400 10px/1.3 Arial,
+    sans-serif;
+  margin: 7px 0 0;
+  color: inherit;
+}
+#app .ayah-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 2px;
+  margin: 0 3px;
+  vertical-align: middle;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  font:
+    400 10px/1 'Noto Naskh Arabic',
+    serif;
+  white-space: nowrap;
+}
+
+#app .home-time-marker {
+  position: relative;
+  z-index: 2;
+  flex-shrink: 0;
+  margin: 0 18px 5px;
+  color: var(--hero-ink);
+}
+#app .home-time-rail {
+  height: 2px;
+  position: relative;
+  background: color-mix(in srgb, currentColor 20%, transparent);
+}
+#app .home-time-rail span {
+  display: block;
+  height: 2px;
+  width: var(--prayer-progress, 0%);
+  background: currentColor;
+}
+#app .home-time-rail b {
+  position: absolute;
+  top: -2px;
+  left: clamp(3px, var(--prayer-progress, 0%), calc(100% - 3px));
+  width: 6px;
+  height: 6px;
+  background: currentColor;
+  border-radius: 50%;
+  transform: translateX(-50%);
+}
+#app .home-time-labels {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 5px;
+  font:
+    400 9px/1.3 Arial,
+    sans-serif;
+}
+#app[data-theme='Fajr'] .reminder-arabic {
+  font-size: 15px;
+  line-height: 1.4;
+}
+#app .reminder-reference {
+  font-size: 9px;
+}
+
+#app .onboarding .welcome-arabic,
+#app .reminder-arabic {
+  font-family: 'Noto Naskh Arabic', 'Geeza Pro', 'Traditional Arabic', serif;
+  font-weight: 400;
+}
+
+#app .hero .stars {
+  width: 142px;
+  height: 76px;
+  top: 24px;
+  right: 22px;
+  letter-spacing: normal;
+  line-height: normal;
+  pointer-events: none;
+}
+#app .hero .stars span {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  background: currentColor;
+}
+#app .hero .stars span:nth-child(1) {
+  left: 8px;
+  top: 12px;
+}
+#app .hero .stars span:nth-child(2) {
+  left: 72px;
+  top: 16px;
+}
+#app .hero .stars span:nth-child(3) {
+  left: 134px;
+  top: 10px;
+}
+#app .hero .stars span:nth-child(4) {
+  left: 32px;
+  top: 57px;
+}
+#app .hero .stars span:nth-child(5) {
+  left: 78px;
+  top: 53px;
+}
+#app .hero .stars span:nth-child(6) {
+  left: 130px;
+  top: 61px;
+}
+
+/* Small, dim points recede; larger, brighter points sit nearer. */
+#app .hero .stars {
+  width: 100%;
+  height: 150px;
+  top: 14px;
+  right: 0;
+}
+#app .hero .stars span {
+  width: 1px;
+  height: 1px;
+  opacity: 0.55;
+}
+#app .hero .stars span:nth-child(1) {
+  left: 6%;
+  top: 12px;
+  width: 2px;
+  height: 2px;
+  opacity: 0.9;
+}
+#app .hero .stars span:nth-child(2) {
+  left: 18%;
+  top: 23px;
+}
+#app .hero .stars span:nth-child(3) {
+  left: 32%;
+  top: 7px;
+  width: 1.5px;
+  height: 1.5px;
+  opacity: 0.75;
+}
+#app .hero .stars span:nth-child(4) {
+  left: 47%;
+  top: 20px;
+}
+#app .hero .stars span:nth-child(5) {
+  left: 62%;
+  top: 8px;
+  width: 2.5px;
+  height: 2.5px;
+  opacity: 1;
+}
+#app .hero .stars span:nth-child(6) {
+  left: 80%;
+  top: 15px;
+}
+#app .hero .stars span:nth-child(7) {
+  left: 94%;
+  top: 32px;
+  width: 1.5px;
+  height: 1.5px;
+  opacity: 0.8;
+}
+#app .hero .stars span:nth-child(8) {
+  left: 9%;
+  top: 67px;
+}
+#app .hero .stars span:nth-child(9) {
+  left: 26%;
+  top: 55px;
+  width: 2px;
+  height: 2px;
+  opacity: 0.9;
+}
+#app .hero .stars span:nth-child(10) {
+  left: 42%;
+  top: 71px;
+}
+#app .hero .stars span:nth-child(11) {
+  left: 57%;
+  top: 48px;
+  width: 1.5px;
+  height: 1.5px;
+  opacity: 0.75;
+}
+#app .hero .stars span:nth-child(12) {
+  left: 68%;
+  top: 88px;
+}
+#app .hero .stars span:nth-child(13) {
+  left: 94%;
+  top: 91px;
+  width: 2px;
+  height: 2px;
+  opacity: 0.9;
+}
+#app .hero .stars span:nth-child(14) {
+  left: 5%;
+  top: 118px;
+  width: 1.5px;
+  height: 1.5px;
+  opacity: 0.75;
+}
+#app .hero .stars span:nth-child(15) {
+  left: 19%;
+  top: 138px;
+}
+#app .hero .stars span:nth-child(16) {
+  left: 39%;
+  top: 108px;
+  width: 2.5px;
+  height: 2.5px;
+  opacity: 1;
+}
+#app .hero .stars span:nth-child(17) {
+  left: 57%;
+  top: 133px;
+}
+#app .hero .stars span:nth-child(18) {
+  left: 87%;
+  top: 142px;
+  width: 1.5px;
+  height: 1.5px;
+  opacity: 0.75;
+}
+
+#app[data-theme='Isha'] .hero .sun-orb {
+  border-radius: 0;
+  box-shadow: none;
+  background: var(--orb);
+  -webkit-mask: url('/night-moon.svg') center / contain no-repeat;
+  mask: url('/night-moon.svg') center / contain no-repeat;
+}
+#app .marker-icon > svg {
+  width: 20px;
+  height: 20px;
 }
