@@ -19,13 +19,13 @@ final class SmallWidgetSizing {
         int inset = width < 70 ? 6 : 8;
         float available = Math.max(20, width - inset * 2);
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        float labelSize = fit(paint, "NEXT PRAYER", 8, available * density, scaledDensity, false, font);
+        float labelSize = fit(paint, "NEXT ATHAN", 8, available * density, scaledDensity, false, "sans-serif");
         float nameSize = fit(paint, prayer, 24, available * density, scaledDensity, true, font);
         float timeSize = fit(paint, clock, 12, available * density, scaledDensity, false, font);
         float blockHeight = height(paint,labelSize,scaledDensity) + height(paint,nameSize,scaledDensity) + height(paint,timeSize,scaledDensity);
 
 
-        float factor = Math.min(1, Math.max(20, height - 8) * density / blockHeight);
+        float factor = Math.min(1, Math.max(20, height - 16) * density / blockHeight);
         views.setTextViewTextSize(R.id.widget_label, TypedValue.COMPLEX_UNIT_SP, labelSize * factor);
         views.setTextViewTextSize(R.id.widget_prayer, TypedValue.COMPLEX_UNIT_SP, nameSize * factor);
         views.setTextViewTextSize(R.id.widget_time, TypedValue.COMPLEX_UNIT_SP, timeSize * factor);

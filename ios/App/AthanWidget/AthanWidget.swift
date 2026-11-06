@@ -125,9 +125,9 @@ struct PrayerWidgetView: View {
     var body: some View {
         GeometryReader { geometry in
         let moonRadius = geometry.size.height / 90 * 11
-        VStack(alignment: family == .systemSmall ? .center : .leading, spacing: family == .systemSmall ? 4 : 1) {
-            Text("NEXT PRAYER")
-                .font(.system(size: family == .systemMedium ? 10 : 11, weight: .regular, design: fontDesign))
+        VStack(alignment: family == .systemSmall ? .center : .leading, spacing: 6) {
+            Text("NEXT ATHAN")
+                .font(.system(size: family == .systemMedium ? 10 : 11, weight: .regular, design: .default))
             Text(entry.name)
                 .font(.system(size: family == .systemMedium ? 36 : 40, weight: .bold, design: fontDesign))
                 .lineLimit(1)
@@ -152,8 +152,8 @@ struct AthanWidget: Widget {
     let kind = "AthanNextPrayer"
     var body: some WidgetConfiguration {
         StaticConfiguration(kind:kind,provider:PrayerProvider()) { PrayerWidgetView(entry:$0) }
-            .configurationDisplayName("Athan — Next prayer")
-            .description("Your next prayer, at a glance.")
+            .configurationDisplayName("Athan — Next athan")
+            .description("Your next athan, at a glance.")
             .supportedFamilies([.systemSmall,.systemMedium])
             .contentMarginsDisabled()
             .containerBackgroundRemovable(false)
@@ -174,8 +174,12 @@ private struct TimeMarkerView: View {
         default: return Color(widgetHex: colorScheme == .dark ? 0xF4F5F7 : 0x263239)
         }
     }
-    private var icon: String {
-        switch entry.name { case "Fajr": return "sunrise"; case "Maghrib": return "sunset"; case "Isha": return "moon"; default: return "sun.max" }
+    private func remaining(until at: Date) -> String {
+        let minutes = max(1, Int(ceil(at.timeIntervalSince(entry.date) / 60)))
+        var calendar=Calendar(identifier: .gregorian)
+        calendar.timeZone=TimeZone(identifier:entry.timezone) ?? .current
+        let tomorrow=calendar.isDate(at,inSameDayAs:entry.date) ? "" : " · Tomorrow"
+        return "In " + (minutes >= 60 ? "\(minutes / 60)h " : "") + "\(minutes % 60)m" + tomorrow
     }
     private func clock(_ date: Date?) -> String {
         guard let date else { return "Open Athan" }
@@ -188,7 +192,7 @@ private struct TimeMarkerView: View {
         return max(0, min(1, entry.date.timeIntervalSince(start) / max(1, next.timeIntervalSince(start))))
     }
     private func font(_ size: CGFloat, weight: Font.Weight = .regular) -> Font {
-        .system(size: size, weight: weight, design: entry.marker.fontFamily == "sans-serif" ? .default : .serif)
+        .system(size: size, weight: weight, design: .default)
     }
     var body: some View {
         GeometryReader { bounds in
@@ -196,16 +200,20 @@ private struct TimeMarkerView: View {
         VStack(spacing: 0) {
             HStack(alignment: .center) {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("NEXT PRAYER").font(font(11 * scale, weight: .medium)).tracking(1.2).opacity(1)
+                    Text("NEXT ATHAN").font(font(8 * scale, weight: .medium)).tracking(1.2).opacity(1)
                     HStack(spacing: 10) {
-                        Text(entry.name).font(font(38 * scale, weight: .bold)).lineLimit(1).minimumScaleFactor(0.6)
-                        if entry.name == "Isha" { PhaseMoon(moon: entry.moon).frame(width: 19, height: 19) } else { Image(systemName: icon).font(.system(size: 19, weight: .light)) }
+                        Text(entry.name).font(entry.marker.fontFamily == "sans-serif" ? font(30 * scale) : .custom("Georgia", size: 30 * scale)).lineLimit(1).minimumScaleFactor(0.6)
                     }
                 }
                 Spacer(minLength: 12)
                 VStack(alignment: .trailing, spacing: 3) {
-                    Text(clock(entry.at)).font(font(22 * scale)).lineLimit(1).minimumScaleFactor(0.7)
-                    if let at = entry.at { Text(at, style: .relative).font(font(12 * scale)).opacity(1) }
+                    Text(clock(entry.at)).font(font(16 * scale)).lineLimit(1).minimumScaleFactor(0.7)
+                    if let at = entry.at {
+                        HStack(spacing:4 * scale) {
+                            Circle().fill(ink.opacity(0.6)).frame(width:5 * scale,height:5 * scale)
+                            Text(remaining(until: at)).font(font(10 * scale))
+                        }
+                    }
                 }
             }
             Spacer(minLength: 6)
@@ -218,10 +226,10 @@ private struct TimeMarkerView: View {
             }.frame(height: 6)
             Spacer(minLength: 6)
             HStack {
-                Text(entry.previous.map { $0.name + " · " + clock(Date(timeIntervalSince1970: $0.at / 1000)) } ?? "Next prayer")
+                Text(entry.previous.map { $0.name + " · " + clock(Date(timeIntervalSince1970: $0.at / 1000)) } ?? "Next athan")
                 Spacer(minLength: 8)
                 Text(entry.name + " · " + clock(entry.at))
-            }.font(font(12 * scale)).opacity(1).lineLimit(1).minimumScaleFactor(0.75)
+            }.font(font(9 * scale)).opacity(1).lineLimit(1).minimumScaleFactor(0.75)
         }
         }
         .padding(.horizontal, 16).padding(.vertical, 12)
@@ -236,7 +244,7 @@ struct TimeMarkerWidget: Widget {
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: "AthanTimeMarker", provider: PrayerProvider()) { TimeMarkerView(entry: $0) }
             .configurationDisplayName("Athan — Time marker")
-            .description("Next prayer, progress, and your choice of colors.")
+            .description("Next athan, progress, and your choice of colors.")
             .supportedFamilies([.systemMedium])
             .contentMarginsDisabled()
     }
@@ -281,7 +289,7 @@ private struct LockScreenPrayerView: View {
             HStack(spacing: 8) {
                 if entry.name == "Isha" { PhaseMoon(moon: entry.moon).frame(width: 22, height: 22) } else { Image(systemName: icon).font(.system(size: 22, weight: .light)) }
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("NEXT PRAYER").font(.system(size: 9, weight: .medium)).tracking(1)
+                    Text("NEXT ATHAN").font(.system(size: 9, weight: .medium)).tracking(1)
                     Text(entry.name).font(.system(size: 20, weight: .bold)).lineLimit(1).minimumScaleFactor(0.6)
                     Text(clock).font(.system(size: 13, weight: .medium)).lineLimit(1).minimumScaleFactor(0.7)
                 }
@@ -292,14 +300,14 @@ private struct LockScreenPrayerView: View {
         content
             .containerBackground(for: .widget) { Color.clear }
             .accessibilityElement(children: .ignore)
-            .accessibilityLabel("Next prayer: \(entry.name), \(clock)")
+            .accessibilityLabel("Next athan: \(entry.name), \(clock)")
     }
 }
 struct LockScreenPrayerWidget: Widget {
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: "AthanLockScreen", provider: PrayerProvider()) { LockScreenPrayerView(entry: $0) }
             .configurationDisplayName("Athan — Lock screen")
-            .description("Your next prayer and its time on the Lock Screen.")
+            .description("Your next athan and its time on the Lock Screen.")
             .supportedFamilies([.accessoryRectangular, .accessoryCircular, .accessoryInline])
     }
 }

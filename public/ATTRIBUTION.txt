@@ -8,3 +8,4 @@ Quran JSON packaging/metadata: Risan Bagja Pradana, CC BY-SA 4.0. https://github
 
 
 Beautiful Adhan: Adam-synagda (2022), CC0 1.0. https://commons.wikimedia.org/wiki/File:Beautiful_adhan.ogg https://creativecommons.org/publicdomain/zero/1.0/ Converted to mono 22.05 kHz MP3; iOS excerpt trimmed to 28 seconds.
+Android background prayer calculations: Adhan Java 1.2.1 by Batoul Apps, MIT. https://github.com/batoulapps/adhan-java See ADHAN-JAVA-LICENSE.txt.

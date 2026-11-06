@@ -10,6 +10,7 @@ public class PrayerAlertReceiver extends BroadcastReceiver {
             ((android.app.NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE)).cancel(PrayerAlerts.NOTIFICATION);
         } else if(PrayerAlerts.FIRE.equals(intent.getAction())) {
             JSONObject due=PrayerAlerts.due(context);
+            PrayerAlerts.restore(context);
             if(due==null) return;
             if(!due.optBoolean("sound")) { AthanPlaybackService.remind(context,due); return; }
             try { androidx.core.content.ContextCompat.startForegroundService(context,new Intent(context,AthanPlaybackService.class).putExtra("prayer",due.toString())); }

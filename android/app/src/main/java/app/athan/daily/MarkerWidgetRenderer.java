@@ -49,47 +49,45 @@ final class MarkerWidgetRenderer {
         float contentHeight=heightDp-padding*2;
         float unit=Math.min(contentHeight/68f,(right-left)/160f);
         float top=(heightDp-68*unit)/2;
-        text(canvas,paint,"NEXT PRAYER",left,top+8*unit,9*unit,ink,false,font);
+        text(canvas,paint,"NEXT ATHAN",left,top+8*unit,8*unit,ink,false,"sans-serif");
         String clock=at>0 ? clock(at,zone) : "Set location";
         float clockSize=16*unit;
-        paint.setTextSize(clockSize); paint.setTypeface(Typeface.create(font,Typeface.NORMAL));
+        paint.setTextSize(clockSize); paint.setTypeface(Typeface.create("sans-serif",Typeface.NORMAL));
         float clockWidth=paint.measureText(clock);
-        float nameWidth=Math.max(25,right-left-clockWidth-26*unit);
-        paint.setTypeface(Typeface.create(font,Typeface.BOLD)); paint.setTextSize(32*unit);
+        float nameWidth=Math.max(25,right-left-clockWidth-12*unit);
+        paint.setTypeface(Typeface.create(font,Typeface.NORMAL)); paint.setTextSize(30*unit);
         float nameSize=32*unit*Math.min(1,nameWidth/Math.max(1,paint.measureText(name)));
-        text(canvas,paint,name,left,top+35*unit,nameSize,ink,true,font);
-        float iconX=left+paint.measureText(name)+5*unit;
-        icon(context,canvas,paint,name,iconX,top+22*unit,13*unit,ink);
-        text(canvas,paint,clock,right-clockWidth,top+29*unit,clockSize,ink,false,font);
-        String remaining=at>0 ? "in "+Math.max(1,(long)Math.ceil((at-now)/60000d))+" min" : "Open app";
-        paint.setTypeface(Typeface.create(font,Typeface.NORMAL)); paint.setTextSize(9*unit); float remainingWidth=paint.measureText(remaining);
-        text(canvas,paint,remaining,right-remainingWidth,top+40*unit,9*unit,ink,false,font);
+        text(canvas,paint,name,left,top+35*unit,nameSize,ink,false,font);
+        text(canvas,paint,clock,right-clockWidth,top+29*unit,clockSize,ink,false,"sans-serif");
+        String remaining=at>0 ? remaining(at-now) : "Open app";
+        if(at>0 && !day(at,zone).equals(day(now,zone))) remaining+=" · Tomorrow";
+        paint.setTypeface(Typeface.create("sans-serif",Typeface.NORMAL)); paint.setTextSize(10*unit); float remainingWidth=paint.measureText(remaining);
+        text(canvas,paint,remaining,right-remainingWidth,top+40*unit,10*unit,ink,false,"sans-serif");
+        paint.setColor(ink);paint.setAlpha(153);canvas.drawCircle(right-remainingWidth-6.5f*unit,top+36.5f*unit,2.5f*unit,paint);paint.setAlpha(255);
         float railY=top+51*unit;
         paint.setStrokeWidth(Math.max(1,unit)); paint.setColor(ink); paint.setAlpha(45); canvas.drawLine(left,railY,right,railY,paint);
         float progress=previousAt>0 && at>previousAt ? Math.max(0,Math.min(1,(float)(now-previousAt)/(at-previousAt))) : 0;
         paint.setAlpha(255); canvas.drawLine(left,railY,left+(right-left)*progress,railY,paint);
         canvas.drawCircle(left+(right-left)*progress,railY,2.5f*unit,paint);
-        String before=previousAt>0 ? previousName+" · "+clock(previousAt,zone) : "Next prayer";
+        String before=previousAt>0 ? previousName+" · "+clock(previousAt,zone) : "Next athan";
         String after=at>0 ? name+" · "+clock : "";
-        float captionSize=8*unit;
-        paint.setTypeface(Typeface.create(font,Typeface.NORMAL)); paint.setTextSize(captionSize);
+        float captionSize=9*unit;
+        paint.setTypeface(Typeface.create("sans-serif",Typeface.NORMAL)); paint.setTextSize(captionSize);
         captionSize*=Math.min(1,(right-left-8*unit)/Math.max(1,paint.measureText(before)+paint.measureText(after)));
         paint.setTextSize(captionSize); float afterWidth=paint.measureText(after);
-        text(canvas,paint,before,left,top+65*unit,captionSize,ink,false,font);
+        text(canvas,paint,before,left,top+65*unit,captionSize,ink,false,"sans-serif");
         text(canvas,paint,after,right-afterWidth,top+65*unit,captionSize,ink,false,font);
         RemoteViews views=new RemoteViews(context.getPackageName(),R.layout.time_marker_widget);
         views.setImageViewBitmap(R.id.marker_art,image);
-        views.setContentDescription(R.id.marker_art,"Next prayer: "+name+", "+clock+", "+remaining);
+        views.setContentDescription(R.id.marker_art,"Next athan: "+name+", "+clock+", "+remaining);
         return views;
     }
     private static int color(String value,int fallback) { try { return Color.parseColor(value); } catch (IllegalArgumentException e) { return fallback; } }
+    private static String day(long at,String zone) { SimpleDateFormat f=new SimpleDateFormat("yyyy-MM-dd",Locale.ROOT);f.setTimeZone(TimeZone.getTimeZone(zone));return f.format(new Date(at)); }
     private static String clock(long at,String zone) { SimpleDateFormat f=new SimpleDateFormat("h:mm a",Locale.getDefault());f.setTimeZone(TimeZone.getTimeZone(zone));return f.format(new Date(at)); }
     private static void text(Canvas c,Paint p,String value,float x,float y,float size,int ink,boolean bold,String font) { p.setStyle(Paint.Style.FILL);p.setColor(ink);p.setAlpha(255);p.setTypeface(Typeface.create(font,bold?Typeface.BOLD:Typeface.NORMAL));p.setTextSize(size);c.drawText(value,x,y,p); }
-    private static void icon(Context context,Canvas c,Paint p,String prayer,float x,float y,float size,int ink) {
-        c.save();c.translate(x,y);c.scale(size/24,size/24);p.setColor(ink);p.setAlpha(255);p.setStyle(Paint.Style.STROKE);p.setStrokeWidth(1.6f);p.setStrokeCap(Paint.Cap.ROUND);
-        if (prayer.equals("Isha")) { p.setStyle(Paint.Style.FILL);NightMoon.draw(context,c,p,12,12,12); }
-        else if (prayer.equals("Fajr") || prayer.equals("Maghrib")) { c.drawArc(6,10,18,22,180,180,false,p);c.drawLine(2,21,22,21,p);c.drawLine(12,2,12,8,p);float tip=prayer.equals("Fajr")?2:8,tail=prayer.equals("Fajr")?5:5;c.drawLine(9,tail,12,tip,p);c.drawLine(15,tail,12,tip,p);c.drawLine(2,13,4,14,p);c.drawLine(20,14,22,13,p); }
-        else { c.drawCircle(12,12,4,p);for(int i=0;i<8;i++){double a=i*Math.PI/4;c.drawLine(12+(float)Math.cos(a)*8,12+(float)Math.sin(a)*8,12+(float)Math.cos(a)*10,12+(float)Math.sin(a)*10,p);} }
-        p.setStyle(Paint.Style.FILL);c.restore();
+    static String remaining(long milliseconds) {
+        long minutes=Math.max(1,(long)Math.ceil(milliseconds/60000d));
+        return "In "+(minutes>=60 ? minutes/60+"h " : "")+minutes%60+"m";
     }
 }

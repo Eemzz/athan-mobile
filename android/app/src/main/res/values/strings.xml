@@ -4,5 +4,5 @@
     <string name="title_activity_main">Athan</string>
     <string name="package_name">app.athan.daily</string>
     <string name="custom_url_scheme">app.athan.daily</string>
-    <string name="widget_description">The next prayer and its time, in your prayer theme.</string>
+    <string name="widget_description">The next athan and its time, in your prayer theme.</string>
 </resources>

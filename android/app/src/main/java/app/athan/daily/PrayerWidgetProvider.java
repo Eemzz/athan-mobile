@@ -88,7 +88,7 @@ public class PrayerWidgetProvider extends AppWidgetProvider {
                 views.setViewPadding(R.id.widget_content,Math.round(20*density),Math.round(4*density),Math.round(right*density),Math.round(4*density));
             }
             views.setImageViewBitmap(R.id.widget_scene, WidgetArtwork.render(context, manager, id, name, small, opacity));
-            views.setTextViewText(R.id.widget_label, styled("NEXT PRAYER", font, false));
+            views.setTextViewText(R.id.widget_label, styled("NEXT ATHAN", "sans-serif", false));
             views.setTextViewText(R.id.widget_prayer, styled(name, font, true));
             views.setTextViewText(R.id.widget_time, styled(clock, font, false));
             for (int textId : new int[]{R.id.widget_label, R.id.widget_prayer, R.id.widget_time}) views.setTextColor(textId, foreground | 0xff000000);

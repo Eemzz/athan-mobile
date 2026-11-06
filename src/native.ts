@@ -56,6 +56,16 @@ export async function syncAlerts(
     await PrayerWidget.scheduleAlerts({
       schedule: JSON.stringify({
         sound: settings.sound,
+        calculation: settings.location
+          ? {
+              latitude: settings.location.latitude,
+              longitude: settings.location.longitude,
+              timezone: settings.location.timezone,
+              method: settings.method,
+              hanafi: settings.hanafi,
+              muted: settings.muted,
+            }
+          : undefined,
         location: settings.location?.label ?? '',
         prayers: selected.map((p) => ({ name: p.name, at: p.at.getTime() })),
       }),
@@ -71,6 +81,8 @@ export async function syncAlerts(
         extra: { prayer: p.name },
       })),
     });
+  if (Capacitor.getPlatform() === 'android')
+    return { message: 'Prayer reminders refresh automatically for your saved location.' + warning };
   const last = selected.at(-1)?.at;
   return {
     message: last

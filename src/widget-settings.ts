@@ -1,6 +1,5 @@
-import { createIcons, Sun, Sunrise, Sunset, Moon } from 'lucide';
+import { formatCountdown } from './countdown';
 import { mountColorPicker } from './color-picker';
-import { lunarSvg } from './lunar-phase';
 import { mountLandscapePreview } from './widget-preview';
 import type { Prayer, Settings } from './prayers';
 import type { MarkerAppearance } from './widget-appearance';
@@ -65,7 +64,7 @@ export function mountMarkerSettings(
   section.classList.add('widget-design-panel');
   section.id = 'widget-settings-marker';
   section.innerHTML = `<h3>Time marker widget</h3>
-  <div class="marker-preview"><div class="marker-card"><div class="marker-top"><div><small>NEXT PRAYER</small><div class="marker-title"><strong></strong><span class="marker-icon"></span></div></div><div class="marker-clock"></div></div><div class="marker-rail"><span></span><b></b></div><div class="marker-caption">Add “Athan — Time marker” from your widget picker.</div></div></div>
+  <div class="marker-preview"><div class="marker-card"><div class="marker-top"><div><small>NEXT ATHAN</small><div class="marker-title"><strong></strong></div></div><div class="marker-clock"><span class="marker-time"></span><small class="marker-remaining"></small></div></div><div class="marker-rail"><span></span><b></b></div><div class="marker-caption">Add “Athan — Time marker” from your widget picker.</div></div></div>
   <label class="setting-field">Font<select id="marker-font"><option value="serif">Serif</option><option value="sans-serif">Sans serif</option></select></label>
   <label class="setting-field">Text color<select id="marker-mode"><option value="automatic">Automatic (phone theme)</option><option value="light">Light</option><option value="dark">Dark</option><option value="custom">Custom</option></select></label>
   <div class="setting-field" id="marker-text-field" role="group" aria-label="Custom text color">Custom text color<input id="marker-text-color" type="color"></div>
@@ -94,7 +93,7 @@ export function mountMarkerSettings(
     const card = get<HTMLElement>('.marker-card');
     card.style.color = ink;
     card.style.setProperty(
-      '--marker-font',
+      '--marker-name-font',
       a.fontFamily === 'serif' ? 'Georgia, serif' : 'Arial, sans-serif',
     );
     get<HTMLSelectElement>('#marker-font').value = a.fontFamily;
@@ -104,27 +103,18 @@ export function mountMarkerSettings(
         .toString(16)
         .padStart(2, '0');
     get<HTMLElement>('.marker-title strong').textContent = prayer?.name ?? 'Asr';
-    get<HTMLElement>('.marker-clock').textContent = prayer
+    get<HTMLElement>('.marker-time').textContent = prayer
       ? new Intl.DateTimeFormat(undefined, {
           hour: 'numeric',
           minute: '2-digit',
           timeZone: settings.location?.timezone,
         }).format(prayer.at)
       : '3:47 PM';
-    const icon =
-      prayer?.name === 'Fajr'
-        ? 'sunrise'
-        : prayer?.name === 'Maghrib'
-          ? 'sunset'
-          : prayer?.name === 'Isha'
-            ? 'moon'
-            : 'sun';
-    get<HTMLElement>('.marker-icon').innerHTML =
-      icon === 'moon' ? lunarSvg() : `<i data-lucide="${icon}"></i>`;
-    createIcons({
-      icons: { Sun, Sunrise, Sunset, Moon },
-      attrs: { width: 20, height: 20, 'stroke-width': 1.6 },
-    });
+    get<HTMLElement>('.marker-remaining').textContent = formatCountdown(
+      prayer?.at ?? new Date(Date.now() + 6420000),
+      new Date(),
+      settings.location?.timezone,
+    );
   }
   const bindings: [string, keyof MarkerAppearance][] = [
     ['#marker-mode', 'textMode'],

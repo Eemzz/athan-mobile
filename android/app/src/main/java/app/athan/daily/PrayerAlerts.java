@@ -24,11 +24,22 @@ final class PrayerAlerts {
         }
         restore(context);
     }
+    static PendingIntent refresh(Context context) {
+        return PendingIntent.getBroadcast(context,19999,new Intent(context,PrayerAlertReceiver.class).setAction("app.athan.daily.REFRESH_ALERTS"),PendingIntent.FLAG_UPDATE_CURRENT|PendingIntent.FLAG_IMMUTABLE);
+    }
     static void restore(Context context) {
         AlarmManager alarms=(AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         for(int i=0;i<60;i++) alarms.cancel(alarm(context,i));
+        alarms.cancel(refresh(context));
         try {
             JSONObject data=new JSONObject(context.getSharedPreferences(PREFS,0).getString("schedule","{}"));
+            JSONObject calculation=data.optJSONObject("calculation");
+            if(calculation!=null) {
+                data.put("prayers",PrayerSchedule.calculate(calculation,System.currentTimeMillis()));
+                context.getSharedPreferences(PREFS,0).edit().putString("schedule",data.toString()).apply();
+                // Daily maintenance plus a refill after every prayer keeps the window rolling.
+                alarms.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,System.currentTimeMillis()+86400000L,refresh(context));
+            }
             JSONArray prayers=data.optJSONArray("prayers");
             if(prayers==null) return;
             for(int i=0;i<Math.min(60,prayers.length());i++) {

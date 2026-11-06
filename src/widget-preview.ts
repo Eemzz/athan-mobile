@@ -65,7 +65,10 @@ export function mountLandscapePreview(
     bg.fillStyle = orb;
     if (name === 'Isha') {
       radius *= 11 / 16;
-      if (small) { cy = 12; radius = Math.min(radius, 8); }
+      if (small) {
+        cy = 12;
+        radius = Math.min(radius, 8);
+      }
 
       bg.save();
       bg.translate(cx - radius, cy - radius);
@@ -135,15 +138,15 @@ export function mountLandscapePreview(
       available = !small && name === 'Isha' ? cx - radius - 8 - left : w - (small ? 16 : 28);
     c.textAlign = small ? 'center' : 'left';
     c.textBaseline = 'middle';
-    const draw = (text: string, maximum: number, y: number, bold = false) => {
-      c.font = `${bold ? 'bold ' : ''}${maximum}px ${family}`;
+    const draw = (text: string, maximum: number, y: number, bold = false, textFamily = family) => {
+      c.font = `${bold ? 'bold ' : ''}${maximum}px ${textFamily}`;
       const font = maximum * Math.min(1, available / Math.max(1, c.measureText(text).width));
-      c.font = `${bold ? 'bold ' : ''}${font}px ${family}`;
+      c.font = `${bold ? 'bold ' : ''}${font}px ${textFamily}`;
       c.fillText(text, left, y);
     };
-    draw('NEXT PRAYER', 8, small ? 29 : 26);
+    draw('NEXT ATHAN', 8, small ? 24 : 22, false, 'Arial, sans-serif');
     draw(name, small ? 24 : 28, 45, true);
-    draw(clock, small ? 12 : 13, small ? 63 : 65);
+    draw(clock, small ? 12 : 13, small ? 69 : 70);
     c.restore();
     canvas.setAttribute(
       'aria-label',

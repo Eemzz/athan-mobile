@@ -1,3 +1,4 @@
+import { formatCountdown } from './countdown';
 import { mountSettingsTabs, type SettingsTab } from './settings-tabs';
 import { mountMarkerSettings } from './widget-settings';
 import { renderPrayerReminder } from './prayer-reminders';
@@ -249,9 +250,7 @@ function tick() {
     ? `${previous.name} · ${time(previous.at)}`
     : '';
   $('.next-prayer-time').textContent = `${p.name} · ${time(p.at)}`;
-  const min = Math.max(1, Math.ceil((p.at.getTime() - now.getTime()) / 60000));
-  $('.count-text').textContent =
-    `In ${min >= 60 ? `${Math.floor(min / 60)}h ` : ''}${min % 60}m${dateKey(p.at) !== dateKey(now) ? ' · Tomorrow' : ''}`;
+  $('.count-text').textContent = formatCountdown(p.at, now, settings.location?.timezone);
   if (lastTheme !== p.name) applyTheme(p.name);
   positionHomeMoon();
 }
