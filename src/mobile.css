@@ -531,7 +531,7 @@ button {
 }
 
 #app .marker-card {
-  font-family: var(--marker-font, Georgia, serif);
+  font-family: Arial, sans-serif;
 }
 #app .marker-title strong {
   font-family: inherit;
@@ -957,28 +957,15 @@ button {
   -webkit-mask: url('/night-moon.svg') center / contain no-repeat;
   mask: url('/night-moon.svg') center / contain no-repeat;
 }
-#app .marker-icon > svg {
-  width: 20px;
-  height: 20px;
-}
 
-#app .marker-remaining {
-  display: block;
-  text-align: right;
-  font-size: 10px;
-  margin-top: 3px;
-}
-
-/* Match the home marker: a soft serif name with sans-serif timing and labels. */
-#app .marker-card {
-  font-family: Arial, sans-serif;
-}
 #app .marker-card .marker-title strong {
   font-family: var(--marker-name-font, Georgia, serif);
   font-weight: 400;
 }
 
 #app .marker-remaining {
+  margin-top: 3px;
+  text-align: right;
   display: flex;
   align-items: center;
   justify-content: flex-end;

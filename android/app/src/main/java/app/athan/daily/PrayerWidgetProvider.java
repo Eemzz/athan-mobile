@@ -55,11 +55,6 @@ public class PrayerWidgetProvider extends AppWidgetProvider {
             if (at > 0) { SimpleDateFormat format = new SimpleDateFormat("h:mm a", Locale.getDefault()); format.setTimeZone(TimeZone.getTimeZone(zone)); clock = format.format(new Date(at)); }
             else if (!location.isEmpty()) { name = "Refresh prayer times"; }
         } catch (Exception ignored) { }
-        int background = R.drawable.widget_fajr;
-        if (name.equals("Dhuhr")) background = R.drawable.widget_dhuhr;
-        if (name.equals("Asr")) background = R.drawable.widget_asr;
-        if (name.equals("Maghrib")) background = R.drawable.widget_maghrib;
-        if (name.equals("Isha")) background = R.drawable.widget_isha;
         int foreground = Color.parseColor(name.equals("Isha") ? "#EEF2FA" : "#394338");
         for (int id : ids) {
             if (manager.getAppWidgetInfo(id).provider.getClassName().equals(TimeMarkerWidgetProvider.class.getName())) {

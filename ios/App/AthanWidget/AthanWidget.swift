@@ -313,24 +313,6 @@ struct LockScreenPrayerWidget: Widget {
 }
 
 
-private struct IconMoon: Shape {
- func path(in rect: CGRect) -> Path {
- var path = Path()
- path.move(to: CGPoint(x: 38.4375, y: 3.125))
- path.addCurve(to: CGPoint(x: 86.8634, y: 34.3723), control1: CGPoint(x: 59.83218, y: 1.21532), control2: CGPoint(x: 79.7873, y: 14.09156))
- path.addCurve(to: CGPoint(x: 68.38676, y: 88.96237), control1: CGPoint(x: 93.93949, y: 54.65304), control2: CGPoint(x: 86.32572, y: 77.14826))
- path.addCurve(to: CGPoint(x: 10.9375, y: 84.375), control1: CGPoint(x: 50.4478, y: 100.77647), control2: CGPoint(x: 26.77437, y: 98.88613))
- path.addCurve(to: CGPoint(x: 57.94646, y: 55.00688), control1: CGPoint(x: 31.60079, y: 87.02647), control2: CGPoint(x: 51.26757, y: 74.73996))
- path.addCurve(to: CGPoint(x: 38.4375, y: 3.125), control1: CGPoint(x: 64.62535, y: 35.2738), control2: CGPoint(x: 56.46353, y: 13.56838))
- path.closeSubpath()
- let scale = min(rect.width, rect.height) / 100
- return path.applying(CGAffineTransform(scaleX: scale, y: scale).concatenating(CGAffineTransform(translationX: rect.midX - 50 * scale, y: rect.midY - 50 * scale)))
- }
-}
-
-
-
-
 private struct MoonIllumination: Shape {
     let moon: StoredMoon?
     func path(in rect: CGRect) -> Path {
