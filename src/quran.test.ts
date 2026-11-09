@@ -42,3 +42,42 @@ test('offline Quran accepts JSON already decompressed by the HTTP layer', async 
   );
   assert.deepEqual(await loadQuran(), JSON.parse(original));
 });
+
+test('Android reads the JSON asset expanded by AAPT without browser decompression', async (t) => {
+  const { Capacitor } = await import('@capacitor/core');
+  t.mock.method(Capacitor, 'getPlatform', () => 'android');
+  const original = await readFile('public/quran.json', 'utf8');
+  t.mock.method(globalThis, 'fetch', async (url: string) => {
+    assert.equal(url, '/quran.json');
+    return new Response(original);
+  });
+  t.mock.method(globalThis, 'DecompressionStream', () => {
+    throw new Error('Android must not need DecompressionStream');
+  });
+  assert.deepEqual(await loadQuran(), JSON.parse(original));
+});
+
+test('unnumbered basmalah is separated from opening ayahs without changing the source', async () => {
+  const { displayVerse, findVerses } = await import('./quran');
+  const quran = JSON.parse(await readFile('public/quran.json', 'utf8'));
+  const opening = quran[0].verses[0].text;
+  let separated = 0;
+  for (const surah of quran)
+    for (const verse of surah.verses) {
+      const display = displayVerse(surah, verse);
+      if (display.basmalah) {
+        separated++;
+        assert.equal(verse.id, 1);
+        assert.equal(display.basmalah + ' ' + display.text, verse.text);
+        assert.ok(!display.text.startsWith(opening));
+      } else assert.equal(display.text, verse.text);
+    }
+  assert.equal(separated, 112);
+  assert.equal(displayVerse(quran[0], quran[0].verses[0]).text, opening);
+  assert.equal(displayVerse(quran[8], quran[8].verses[0]).basmalah, null);
+  assert.equal(displayVerse(quran[26], quran[26].verses[29]).text, quran[26].verses[29].text);
+  assert.deepEqual(
+    findVerses(quran, opening).map(({ s, v }) => `${s.id}:${v.id}`),
+    ['1:1', '27:30'],
+  );
+});

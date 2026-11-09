@@ -1,10 +1,11 @@
+import { bookmarkTarget, restoreBookmarks, toggleBookmark } from './quran-bookmarks';
 import { formatCountdown } from './countdown';
 import { mountSettingsTabs, type SettingsTab } from './settings-tabs';
 import { mountMarkerSettings } from './widget-settings';
 import { renderPrayerReminder } from './prayer-reminders';
 import { lunarSvg } from './lunar-phase';
 import { appTemplate } from './app-template';
-import { findVerses, loadQuran, type Surah } from './quran';
+import { findVerses, loadQuran, displayVerse, type Surah, type Verse } from './quran';
 import { restoreSettings } from './settings';
 import './design.css';
 import './mobile.css';
@@ -75,6 +76,8 @@ let settings: Settings = { ...defaults },
   next: Prayer | undefined,
   lastTheme = '',
   screen = 'today';
+let bookmarks: string[] = [];
+let quranTab: 'surahs' | 'bookmarks' = 'surahs';
 let quran: Surah[] | null = null,
   selectedSurah = 0,
   query = '',
@@ -439,34 +442,97 @@ async function openQuran() {
   }
   $('.quran-results').textContent = 'Opening Quran…';
   try {
-    quran = await loadQuran();
+    const loaded = await loadQuran();
+    const saved = await Preferences.get({ key: 'quran-bookmarks' });
+    const legacy =
+      saved.value === null ? await Preferences.get({ key: 'bookmark' }) : { value: null };
+    bookmarks = restoreBookmarks(saved.value, legacy.value, loaded);
+    quran = loaded;
     renderQuran();
   } catch {
     $('.quran-results').textContent = 'Unable to open the offline Quran. Please reopen the app.';
   }
 }
+function bookmarkButton(reference: string, label: string) {
+  const saved = bookmarks.includes(reference);
+  return `<button class="bookmark${saved ? ' is-bookmarked' : ''}" data-bookmark="${reference}" aria-pressed="${saved}" aria-label="${saved ? 'Remove bookmark for' : 'Bookmark'} ${esc(label)}">${icon('bookmark')}</button>`;
+}
+function openBookmark(reference: string) {
+  if (!quran) return;
+  const saved = bookmarkTarget(reference, quran);
+  if (!saved) return;
+  clearTimeout(searchTimer);
+  quranTab = 'surahs';
+  query = '';
+  selectedSurah = saved.surah.id;
+  page = saved.page;
+  $<HTMLInputElement>('#quran-search').value = '';
+  renderQuran();
+  requestAnimationFrame(() => {
+    const target = saved.verse
+      ? app.querySelector<HTMLElement>(`[data-verse="${reference}"]`)
+      : $('.reader-navigation');
+    target?.scrollIntoView({ block: 'start' });
+  });
+}
+function renderBookmarks() {
+  const host = $('.quran-bookmarks');
+  const label = (reference: string) => {
+    const target = bookmarkTarget(reference, quran!)!;
+    return target.surah.transliteration + (target.verse ? ' · ' + reference : ' · Surah');
+  };
+  host.innerHTML = bookmarks.length
+    ? bookmarks
+        .map(
+          (ref) =>
+            `<div class="saved-bookmark"><button data-open-bookmark="${ref}">${esc(label(ref))}</button>${bookmarkButton(ref, label(ref))}</div>`,
+        )
+        .join('')
+    : '<p class="subtle">No bookmarks yet. Tap the bookmark icon beside a surah or verse to save it here.</p>';
+  host
+    .querySelectorAll<HTMLButtonElement>('[data-open-bookmark]')
+    .forEach((button) => (button.onclick = () => openBookmark(button.dataset.openBookmark!)));
+}
+function renderVerse(surah: Surah, verse: Verse) {
+  const display = displayVerse(surah, verse);
+  const reference = `${surah.id}:${verse.id}`;
+  const opening = display.basmalah
+    ? `<p class="basmalah" lang="ar" dir="rtl">${esc(display.basmalah)}</p>`
+    : '';
+  return (
+    opening +
+    `<article class="verse" data-verse="${reference}"><div class="verse-label">${esc(surah.transliteration)} · ${reference}${bookmarkButton(reference, `verse ${reference}`)}</div><p class="arabic" lang="ar" dir="rtl">${esc(display.text)}</p><p class="translation">${esc(verse.translation)}</p></article>`
+  );
+}
 function renderQuran() {
   if (!quran) return;
+  renderBookmarks();
   const target = $('.quran-results');
+  const showingBookmarks = quranTab === 'bookmarks';
+  target.hidden = showingBookmarks;
+  $('.quran-bookmarks').hidden = !showingBookmarks;
+  $('.quran-screen .search').hidden = showingBookmarks;
+  app.querySelectorAll<HTMLButtonElement>('[data-quran-tab]').forEach((button) => {
+    const selected = button.dataset.quranTab === quranTab;
+    button.setAttribute('aria-selected', String(selected));
+    button.tabIndex = selected ? 0 : -1;
+  });
   const term = normalize(query.trim());
-  if (!term && !selectedSurah) {
+  if (showingBookmarks) {
+    target.innerHTML = '';
+  } else if (!term && !selectedSurah) {
     target.innerHTML = quran
       .map(
         (s) =>
-          `<button class="surah-row" data-surah="${s.id}"><span class="surah-number">${s.id}</span><span>${esc(s.transliteration)}<small>${esc(s.translation)} · ${s.verses.length} verses</small></span><span lang="ar" dir="rtl">${esc(s.name)}</span></button>`,
+          `<div class="surah-item"><button class="surah-row" data-surah="${s.id}"><span class="surah-number">${s.id}</span><span>${esc(s.transliteration)}<small>${esc(s.translation)} · ${s.verses.length} verses</small></span><span lang="ar" dir="rtl">${esc(s.name)}</span></button>${bookmarkButton(String(s.id), s.transliteration)}</div>`,
       )
       .join('');
   } else {
     const matches = findVerses(quran, query, selectedSurah);
     const shown = matches.slice(page * 30, (page + 1) * 30);
     target.innerHTML =
-      `<button class="back-surahs secondary">${icon('arrow-left')}All surahs</button><p class="subtle">${matches.length} ${matches.length === 1 ? 'verse' : 'verses'}${!term && selectedSurah ? ' · ' + esc(quran.find((s) => s.id === selectedSurah)!.transliteration) : ''}</p>` +
-      shown
-        .map(
-          ({ s, v }) =>
-            `<article class="verse"><div class="verse-label">${esc(s.transliteration)} · ${s.id}:${v.id}<button class="bookmark" data-bookmark="${s.id}:${v.id}" aria-label="Bookmark verse ${s.id}:${v.id}">${icon('bookmark')}</button></div><p class="arabic" lang="ar" dir="rtl">${esc(v.text)}</p><p class="translation">${esc(v.translation)}</p></article>`,
-        )
-        .join('') +
+      `<div class="reader-navigation"><button class="back-surahs secondary">${icon('arrow-left')}All surahs</button><div class="reader-title"><p class="subtle reader-context">${!term && selectedSurah ? esc(quran.find((s) => s.id === selectedSurah)!.transliteration) + ' · ' : ''}${matches.length} ${matches.length === 1 ? 'verse' : 'verses'}</p>${!term && selectedSurah ? bookmarkButton(String(selectedSurah), quran.find((s) => s.id === selectedSurah)!.transliteration) : ''}</div></div>` +
+      shown.map(({ s, v }) => renderVerse(s, v)).join('') +
       (matches.length > 30
         ? `<div class="pagination"><button class="secondary previous" ${page === 0 ? 'disabled' : ''}>Previous</button><span>${page + 1} / ${Math.ceil(matches.length / 30)}</span><button class="secondary next" ${(page + 1) * 30 >= matches.length ? 'disabled' : ''}>Next</button></div>`
         : '');
@@ -487,13 +553,6 @@ function renderQuran() {
       renderQuran();
       window.scrollTo({ top: 0 });
     });
-    target.querySelectorAll<HTMLButtonElement>('[data-bookmark]').forEach(
-      (b) =>
-        (b.onclick = async () => {
-          await Preferences.set({ key: 'bookmark', value: b.dataset.bookmark! });
-          message(`Saved ${b.dataset.bookmark}. Search that reference to return.`);
-        }),
-    );
   }
   target.querySelectorAll<HTMLButtonElement>('[data-surah]').forEach(
     (b) =>
@@ -503,8 +562,54 @@ function renderQuran() {
         renderQuran();
       }),
   );
+  app.querySelectorAll<HTMLButtonElement>('[data-bookmark]').forEach(
+    (button) =>
+      (button.onclick = async () => {
+        const reference = button.dataset.bookmark!;
+        const updated = toggleBookmark(bookmarks, reference);
+        try {
+          await Preferences.set({ key: 'quran-bookmarks', value: JSON.stringify(updated) });
+          const added = updated.includes(reference);
+          bookmarks = updated;
+          renderQuran();
+          message(
+            added ? 'Bookmark saved. Open the Bookmarks tab to return.' : 'Bookmark removed.',
+          );
+        } catch {
+          message('Could not save your bookmark. Please try again.', true);
+        }
+      }),
+  );
   drawIcons();
 }
+app.querySelectorAll<HTMLButtonElement>('[data-quran-tab]').forEach((button) => {
+  button.onclick = () => {
+    quranTab = button.dataset.quranTab as 'surahs' | 'bookmarks';
+    if (quranTab === 'surahs') {
+      query = '';
+      selectedSurah = 0;
+      page = 0;
+      $<HTMLInputElement>('#quran-search').value = '';
+      clearTimeout(searchTimer);
+    }
+    renderQuran();
+  };
+  button.onkeydown = (event) => {
+    if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+    event.preventDefault();
+    const name =
+      event.key === 'Home'
+        ? 'surahs'
+        : event.key === 'End'
+          ? 'bookmarks'
+          : button.dataset.quranTab === 'surahs'
+            ? 'bookmarks'
+            : 'surahs';
+    const next = $<HTMLButtonElement>(`[data-quran-tab="${name}"]`);
+    next.click();
+    next.focus();
+  };
+});
 let searchTimer: ReturnType<typeof setTimeout>;
 $<HTMLInputElement>('#quran-search').oninput = () => {
   clearTimeout(searchTimer);

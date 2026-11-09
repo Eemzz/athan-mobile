@@ -55,7 +55,11 @@ export function appTemplate(icon: (name: string) => string): string {
     <section class="quran-screen" hidden>
       <div class="quran-heading">
         <h1>Quran</h1>
-        <p>A little reading. A little reflection.</p>
+        <p>Let every ayah bring you closer to Allah.</p>
+      </div>
+      <div class="quran-tabs" role="tablist" aria-label="Quran sections">
+        <button type="button" id="quran-tab-surahs" role="tab" data-quran-tab="surahs" aria-selected="true" aria-controls="quran-results">Surahs</button>
+        <button type="button" id="quran-tab-bookmarks" role="tab" data-quran-tab="bookmarks" aria-selected="false" aria-controls="quran-bookmarks" tabindex="-1">Bookmarks</button>
       </div>
       <label class="search"
         >${icon('search')}<input
@@ -65,11 +69,12 @@ export function appTemplate(icon: (name: string) => string): string {
           placeholder="Surah, verse (2:255), or words"
       /></label>
       <div class="reader-meta">ARABIC + ENGLISH <span>Offline · Pickthall</span></div>
+      <section id="quran-bookmarks" class="quran-bookmarks" role="tabpanel" aria-labelledby="quran-tab-bookmarks" hidden></section>
+      <div id="quran-results" class="quran-results" role="tabpanel" aria-labelledby="quran-tab-surahs" aria-live="polite"></div>
       <details class="feature-credit">
         <summary>Quran text sources</summary>
         <p class="settings-note">Arabic: <a href="https://tanzil.net" target="_blank" rel="noopener">Tanzil Project</a>, preserved verbatim under <a href="https://creativecommons.org/licenses/by/3.0/" target="_blank" rel="noopener">CC BY 3.0</a>. English: Mohammed Marmaduke Pickthall (1930), public domain. Dataset and metadata: <a href="https://github.com/risan/quran-json" target="_blank" rel="noopener">Quran JSON by Risan Bagja Pradana</a>, <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a>.</p>
       </details>
-      <div class="quran-results" aria-live="polite"></div>
     </section>
     <section class="settings-screen" hidden>
       <h1>Settings</h1>

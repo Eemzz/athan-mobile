@@ -441,7 +441,7 @@ button {
 #app .color-swatches button {
   width: 36px;
   height: 36px;
-  min-height: 36px;
+  min-height: 44px;
   padding: 0;
   border-radius: 50%;
   background: var(--swatch);
@@ -982,4 +982,106 @@ button {
   background: currentColor;
   opacity: 0.6;
   flex-shrink: 0;
+}
+
+#app .reader-navigation {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 12px 0;
+}
+#app .reader-navigation .back-surahs {
+  margin: 0;
+  flex-shrink: 0;
+}
+#app .reader-context {
+  margin: 0;
+  min-width: 0;
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+
+#app .quran-bookmarks {
+  margin: 14px 0 20px;
+}
+#app .saved-bookmark {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid var(--line);
+  padding: 8px 0;
+}
+#app .saved-bookmark > button:first-child {
+  flex: 1;
+  text-align: left;
+  background: transparent;
+  border: 0;
+  color: var(--ink);
+  padding: 10px 0;
+}
+#app .surah-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+#app .surah-item .surah-row {
+  min-width: 0;
+  flex: 1;
+}
+#app .bookmark {
+  flex-shrink: 0;
+  min-width: 44px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+#app .bookmark.is-bookmarked svg {
+  fill: currentColor;
+}
+#app .reader-title {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  min-width: 0;
+}
+#app .verse {
+  scroll-margin-top: 18px;
+}
+
+#app .quran-screen .basmalah {
+  margin: 24px 0 18px;
+  text-align: center;
+  font:
+    400 24px/1.8 'Noto Naskh Arabic',
+    'Geeza Pro',
+    'Traditional Arabic',
+    serif;
+  color: var(--ink);
+}
+
+#app .quran-tabs {
+  display: flex;
+  gap: 6px;
+  margin: 0 0 18px;
+  padding: 4px;
+  border-radius: 14px;
+  background: var(--wash);
+}
+#app .quran-tabs button {
+  flex: 1;
+  border: 0;
+  border-radius: 10px;
+  padding: 11px 14px;
+  font: inherit;
+  font-size: 14px;
+  background: transparent;
+  color: var(--muted-ink);
+}
+#app .quran-tabs button[aria-selected='true'] {
+  background: var(--paper);
+  color: var(--ink);
+  box-shadow: 0 1px 3px #0001;
 }
