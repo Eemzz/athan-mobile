@@ -14,6 +14,7 @@ const [chapters, arabic, english, sources] = await Promise.all([
 ]);
 const data = chapters.map((s) => ({
   ...s,
+  name: s.id === 78 ? 'النبأ' : s.name,
   notice: arabic.find((a) => a.id === s.id).notice,
   verses: arabic
     .find((a) => a.id === s.id)

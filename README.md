@@ -1,4 +1,6 @@
-# Athan
+# Awtad
+
+<img src="ios/App/App/Assets.xcassets/AppIcon.appiconset/AppIcon-512@2x.png" alt="Awtad gold crescent and mountain wave icon" width="88">
 
 A simple Android and iOS app for prayer times, athan reminders, and reading the Quran offline.
 
@@ -6,16 +8,17 @@ A simple Android and iOS app for prayer times, athan reminders, and reading the 
 
 - Local prayer times and a countdown to the next athan
 - Prayer reminders with athan audio or the phone's notification sound
-- Five prayer themes, with moon phases in the Isha scene
+- Five prayer themes, with a gold moon that follows the lunar phase in Isha
 - Customizable small, large, and time marker widgets
-- lock screen widgets
+- Lock screen widgets
 - Offline Arabic Quran and English translation, with search and bookmarks
+
 
 ## Screenshots
 
 | Today | Quran | Widget settings |
 | --- | --- | --- |
-| <img src="assets/screenshots/today.jpg" alt="Isha dashboard and daily prayer times" width="245"> | <img src="assets/screenshots/quran.jpg" alt="Quran reader with an Arabic ayah and English translation" width="245"> | <img src="assets/screenshots/widgets.jpg" alt="Large widget preview with font and opacity controls" width="245"> |
+| <img src="assets/screenshots/today.jpg" alt="Maghrib dashboard and daily prayer times" width="245"> | <img src="assets/screenshots/quran.jpg" alt="Quran reader with an Arabic ayah and English translation" width="245"> | <img src="assets/screenshots/widgets.jpg" alt="Large widget preview with font and opacity controls" width="245"> |
 
 ### Widget previews
 

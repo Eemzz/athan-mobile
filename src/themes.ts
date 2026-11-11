@@ -85,7 +85,7 @@ export const themes: Record<
   Isha: {
     sky: 'linear-gradient(145deg,#223350,#34466b)',
     ink: '#eef2fa',
-    orb: '#e6ecf7',
+    orb: '#efbd79',
     glow: '#eeebd022',
     hill: '#1c2b44',
     paper: '#151e30',

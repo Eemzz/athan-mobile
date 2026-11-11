@@ -1,7 +1,7 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 const config: CapacitorConfig = {
   appId: 'app.athan.daily',
-  appName: 'Athan',
+  appName: 'Awtad',
   webDir: 'dist',
   backgroundColor: '#f8faf6',
   plugins: {

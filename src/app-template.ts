@@ -2,7 +2,7 @@ export function appTemplate(icon: (name: string) => string): string {
   return `
 <div class="phone">
   <header>
-    <span class="brand">athan<span>·</span></span
+    <span class="brand" role="img" aria-label="Awtad">a<svg class="brand-ridgeline" viewBox="39 0 87 64" aria-hidden="true" focusable="false"><path class="brand-crescent" fill="#99601E" transform="translate(67.3 14.5) scale(.49)" d="M89 4 A12 12 0 1 1 76 -10 A10 10 0 0 0 89 4Z"/><path fill="none" stroke="currentColor" stroke-width="5.5" stroke-linecap="round" transform="translate(39 80) scale(.94 -.94)" d="M0 58 C12 58 15 28 26 28 C35 28 38 55 46 55 C54 55 57 35 65 35 C74 35 79 58 88 58"/></svg>tad</span
     ><button class="location" aria-label="Change location">${icon('map-pin')}<span></span></button>
   </header>
   <main>
@@ -20,8 +20,8 @@ export function appTemplate(icon: (name: string) => string): string {
         <div class="hero">
           <div class="stars" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
           <div class="sun-orb" aria-hidden="true"></div>
-          <div class="land land-back" aria-hidden="true"></div>
-          <div class="land land-front" aria-hidden="true"></div>
+          <svg class="land land-back" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" focusable="false"><defs><path id="back-ridge" d="M0 76 L12 69 L26 72 L41 58 L51 42 L60.5 21.3 Q62 18 63.5 21.3 L73 42 L81 28 L87.7 11.2 Q89 8 90.5 10.9 L100 29 V100 H0 Z"/></defs><use href="#back-ridge" fill="var(--hill)"/><use href="#back-ridge" fill="var(--paper)" opacity=".35"/></svg>
+          <svg class="land land-front" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path d="M0 68 L11 64 Q14 63 17 65 L25 71 Q28 74 32 71 L57 45 Q61 41 65 43 L75 48 Q79 50 83 44 L100 20 V100 H0 Z"/></svg>
           <div class="hero-content">
             <span class="eyebrow">NEXT ATHAN</span>
             <h1 class="next-name"></h1>

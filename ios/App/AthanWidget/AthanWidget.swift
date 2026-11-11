@@ -18,7 +18,7 @@ struct PrayerProvider: TimelineProvider {
     func placeholder(in context: Context) -> PrayerEntry { PrayerEntry(date: Date(), name: "Asr", at: Date().addingTimeInterval(2400), location: "Your location", timezone: TimeZone.current.identifier) }
     func entry(at date: Date, schedule: StoredSchedule?) -> PrayerEntry {
         let next = schedule?.prayers.first(where: { $0.at / 1000 > date.timeIntervalSince1970 })
-        return PrayerEntry(date: date, name: next?.name ?? "Open Athan", at: next.map { Date(timeIntervalSince1970: $0.at / 1000) }, location: schedule?.location ?? "Set your location", timezone: schedule?.timezone ?? TimeZone.current.identifier, marker: schedule?.marker ?? StoredMarker(), previous: schedule?.prayers.last(where: { $0.at / 1000 <= date.timeIntervalSince1970 }), landscape: schedule?.landscape, moon: schedule?.moons?.last(where: { $0.at / 1000 <= date.timeIntervalSince1970 }))
+        return PrayerEntry(date: date, name: next?.name ?? "Open Awtad", at: next.map { Date(timeIntervalSince1970: $0.at / 1000) }, location: schedule?.location ?? "Set your location", timezone: schedule?.timezone ?? TimeZone.current.identifier, marker: schedule?.marker ?? StoredMarker(), previous: schedule?.prayers.last(where: { $0.at / 1000 <= date.timeIntervalSince1970 }), landscape: schedule?.landscape, moon: schedule?.moons?.last(where: { $0.at / 1000 <= date.timeIntervalSince1970 }))
     }
     func load() -> StoredSchedule? {
         guard let value = UserDefaults(suiteName: "group.app.athan.daily")?.string(forKey: "prayerSchedule"), let data = value.data(using: .utf8) else { return nil }
@@ -152,7 +152,7 @@ struct AthanWidget: Widget {
     let kind = "AthanNextPrayer"
     var body: some WidgetConfiguration {
         StaticConfiguration(kind:kind,provider:PrayerProvider()) { PrayerWidgetView(entry:$0) }
-            .configurationDisplayName("Athan — Next athan")
+            .configurationDisplayName("Awtad — Next athan")
             .description("Your next athan, at a glance.")
             .supportedFamilies([.systemSmall,.systemMedium])
             .contentMarginsDisabled()
@@ -182,7 +182,7 @@ private struct TimeMarkerView: View {
         return "In " + (minutes >= 60 ? "\(minutes / 60)h " : "") + "\(minutes % 60)m" + tomorrow
     }
     private func clock(_ date: Date?) -> String {
-        guard let date else { return "Open Athan" }
+        guard let date else { return "Open Awtad" }
         let f = DateFormatter(); f.timeStyle = .short; f.timeZone = TimeZone(identifier: entry.timezone)
         return f.string(from: date)
     }
@@ -243,7 +243,7 @@ private struct TimeMarkerView: View {
 struct TimeMarkerWidget: Widget {
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: "AthanTimeMarker", provider: PrayerProvider()) { TimeMarkerView(entry: $0) }
-            .configurationDisplayName("Athan — Time marker")
+            .configurationDisplayName("Awtad — Time marker")
             .description("Next athan, progress, and your choice of colors.")
             .supportedFamilies([.systemMedium])
             .contentMarginsDisabled()
@@ -306,7 +306,7 @@ private struct LockScreenPrayerView: View {
 struct LockScreenPrayerWidget: Widget {
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: "AthanLockScreen", provider: PrayerProvider()) { LockScreenPrayerView(entry: $0) }
-            .configurationDisplayName("Athan — Lock screen")
+            .configurationDisplayName("Awtad — Lock screen")
             .description("Your next athan and its time on the Lock Screen.")
             .supportedFamilies([.accessoryRectangular, .accessoryCircular, .accessoryInline])
     }

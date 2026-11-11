@@ -125,12 +125,14 @@
   padding: 26px 23px 23px;
 }
 #app .brand {
-  font-size: 28px;
+  font-size: 36px;
   letter-spacing: -1.4px;
   font-family: Georgia, serif;
 }
-#app .brand > span {
-  color: #83937a;
+#app .brand-ridgeline {
+  width: 1.145em;
+  height: 0.842em;
+  vertical-align: -0.066em;
 }
 #app .location {
   border: 0;
@@ -583,37 +585,12 @@
 }
 #app .hero .land-back {
   height: 100px;
-  background: color-mix(in srgb, var(--hill) 65%, var(--paper) 35%);
-  clip-path: polygon(
-    0 76%,
-    12% 69%,
-    26% 72%,
-    41% 58%,
-    51% 42%,
-    62% 18%,
-    73% 42%,
-    81% 28%,
-    89% 8%,
-    100% 29%,
-    100% 100%,
-    0 100%
-  );
+  background: none;
 }
 #app .hero .land-front {
   height: 74px;
-  clip-path: polygon(
-    0 68%,
-    14% 64%,
-    28% 73%,
-    42% 62%,
-    54% 52%,
-    65% 35%,
-    79% 48%,
-    90% 33%,
-    100% 20%,
-    100% 100%,
-    0 100%
-  );
+  background: none;
+  fill: var(--hill);
 }
 #app[data-theme='Fajr'] .hero .sun-orb {
   right: 83px;
@@ -642,7 +619,6 @@
     transition: none;
   }
 }
-#app .brand > span,
 #app .prayer-row svg {
   color: var(--accent-ink);
 }
@@ -717,4 +693,8 @@
     padding-left: 15px;
     padding-right: 15px;
   }
+}
+
+#app[data-theme='Isha'] .brand-crescent {
+  fill: #efbd79;
 }

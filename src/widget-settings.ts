@@ -64,7 +64,7 @@ export function mountMarkerSettings(
   section.classList.add('widget-design-panel');
   section.id = 'widget-settings-marker';
   section.innerHTML = `<h3>Time marker widget</h3>
-  <div class="marker-preview"><div class="marker-card"><div class="marker-top"><div><small>NEXT ATHAN</small><div class="marker-title"><strong></strong></div></div><div class="marker-clock"><span class="marker-time"></span><small class="marker-remaining"></small></div></div><div class="marker-rail"><span></span><b></b></div><div class="marker-caption">Add “Athan — Time marker” from your widget picker.</div></div></div>
+  <div class="marker-preview"><div class="marker-card"><div class="marker-top"><div><small>NEXT ATHAN</small><div class="marker-title"><strong></strong></div></div><div class="marker-clock"><span class="marker-time"></span><small class="marker-remaining"></small></div></div><div class="marker-rail"><span></span><b></b></div><div class="marker-caption">Add “Awtad — Time marker” from your widget picker.</div></div></div>
   <label class="setting-field">Font<select id="marker-font"><option value="serif">Serif</option><option value="sans-serif">Sans serif</option></select></label>
   <label class="setting-field">Text color<select id="marker-mode"><option value="automatic">Automatic (phone theme)</option><option value="light">Light</option><option value="dark">Dark</option><option value="custom">Custom</option></select></label>
   <div class="setting-field" id="marker-text-field" role="group" aria-label="Custom text color">Custom text color<input id="marker-text-color" type="color"></div>

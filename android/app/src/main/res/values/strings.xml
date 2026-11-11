@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">Athan</string>
-    <string name="title_activity_main">Athan</string>
+    <string name="app_name">Awtad</string>
+    <string name="title_activity_main">Awtad</string>
     <string name="package_name">app.athan.daily</string>
     <string name="custom_url_scheme">app.athan.daily</string>
     <string name="widget_description">The next athan and its time, in your prayer theme.</string>
