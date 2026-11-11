@@ -20,7 +20,7 @@ A simple Android and iOS app for prayer times, athan reminders, and reading the 
 
 | Small | Large | Time marker |
 | --- | --- | --- |
-| ![Small Isha widget](assets/screenshots/widget-small.jpg) | ![Large Isha widget](assets/screenshots/widget-large.jpg) | ![Time marker with countdown and progress bar](assets/screenshots/widget-time-marker.jpg) |
+| ![Small Isha widget](assets/screenshots/widget-small.jpg) | ![Large Isha widget](assets/screenshots/widget-large.jpg) | ![Time marker with countdown and progress bar](assets/screenshots/time-marker-preview.jpg) |
 
 
 ## Install
