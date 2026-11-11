@@ -4,11 +4,11 @@ A simple Android and iOS app for prayer times, athan reminders, and reading the 
 
 ## Features
 
-- ✅ Local prayer times and a countdown to the next athan
-- ✅ Prayer reminders with athan audio or the phone's notification sound
-- ✅ Five prayer themes, with moon phases in the Isha scene
-- ✅ Customizable small, large, and time marker widgets
-- ✅ Offline Arabic Quran and English translation, with search and bookmarks
+- Local prayer times and a countdown to the next athan
+- Prayer reminders with athan audio or the phone's notification sound
+- Five prayer themes, with moon phases in the Isha scene
+- Customizable small, large, and time marker widgets
+- Offline Arabic Quran and English translation, with search and bookmarks
 
 ## Screenshots
 
