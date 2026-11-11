@@ -16,6 +16,13 @@ A simple Android and iOS app for prayer times, athan reminders, and reading the 
 | --- | --- | --- |
 | <img src="assets/screenshots/today.jpg" alt="Isha dashboard and daily prayer times" width="245"> | <img src="assets/screenshots/quran.jpg" alt="Quran reader with an Arabic ayah and English translation" width="245"> | <img src="assets/screenshots/widgets.jpg" alt="Large widget preview with font and opacity controls" width="245"> |
 
+### Widget previews
+
+| Small | Large | Time marker |
+| --- | --- | --- |
+| ![Small Isha widget](assets/screenshots/widget-small.jpg) | ![Large Isha widget](assets/screenshots/widget-large.jpg) | ![Time marker with countdown and progress bar](assets/screenshots/widget-time-marker.jpg) |
+
+
 ## Install
 
 Clone the repository and run the setup commands below. Open `android/` in Android Studio and click **Run** with a phone or emulator selected. On macOS, run `npm run ios` and build in Xcode with your signing team and App Group configured for the app and widget.
